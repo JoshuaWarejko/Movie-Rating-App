@@ -17,10 +17,7 @@
 <p>then</p> 
 ```$ use admin```
 <p>to switch to the admin database.</p>
-```db.createUser( { user: "<username>",
-          pwd: "<password>",
-     			roles: [ "userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"] } )
-```
+```db.createUser({ user: "<username>", pwd: "<password>", roles: [ "userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})```
 <p>This will create a user with all privileges in any database.</p>
 <p>Once you have created an admin user, in the project folder, navigate to</p>
 ```/config/mongo.js```
