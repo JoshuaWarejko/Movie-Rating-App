@@ -19,8 +19,7 @@
 <p>to switch to the admin database.</p>
 ```db.createUser({ user: "<username>", pwd: "<password>", roles: [ "userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})```
 <p>This will create a user with all privileges in any database.</p>
-<p>Once you have created an admin user, in the project folder, navigate to</p>
-```/config/mongo.js```
+<p>Once you have created an admin user, in the project folder, navigate to <strong>/config/mongo.js</strong></p>
 <p>Here you will add the username and password that you just created to the json configuration for development and production. <strong>Be sure to remove the username and password before you push any code up to github.</strong></p>
 <h3>Running the app</h3>
 <p>If all of the above are successful, navigate to the root directory in terminal and run</p>
