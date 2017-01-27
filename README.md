@@ -9,7 +9,7 @@
 <p>Once you have homebrew install, you can install mongodb with the following command:</p>
 ```$ brew install mongodb```
 <p>If you run into any errors downloading MongoDB, visit <a href="http://treehouse.github.io/installation-guides/mac/mongo-mac.html" target="_blank">here</a> for more information.</p>
-<h3>Creating root user for local database authentication</h3>
+<h3>Creating root user for local database authentication (Optional until production)</h3>
 <p>To do this, run</p>
 ```$ mongod```
 <p>in the terminal and then open up a new terminal window. In this new window enter</p>
