@@ -1,0 +1,19 @@
+<div ui-view id="error404">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="page-header">	
+					<h1 class="text-info text-center">{{ error.status }} {{ error.name }}</h1>
+				</div>
+			</div>
+			<div class="col-xs-push-2 col-xs-8">	
+				<div class="panel panel-danger">
+					<div class="panel-heading alert-danger" data-ng-bind-html="error.message"></div>
+					<div class="panel-body">
+						<div class="pre pre-scrollable bg-danger" data-ng-bind-html="error.stack"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<div>
+</div>

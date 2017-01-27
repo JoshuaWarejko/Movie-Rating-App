@@ -1,0 +1,7 @@
+<script type="text/javascript">
+	window.error = new Error("{{{ message }}}");
+	window.error.name = "{{{ title }}}";
+	window.error.status = "{{{ status }}}";
+	{{#if stack}}window.error.stack = {{{ stack }}};{{/if}}
+</script>
+<div ui-view class="body-padding"></div>

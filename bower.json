@@ -1,0 +1,46 @@
+{
+  "name": "movie-rating-app",
+  "description": "Movie Rating App Server and Frontend Interface",
+  "main": "server.js",
+  "authors": [
+    "Joshua Warejko <josh@newleaf.team>"
+  ],
+  "license": "UNLICENSED",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-cookies": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "angularjs-datepicker": "^2.1.6",
+    "angular-bootstrap": "^2.0.0",
+    "angular-animate": "1.5.9",
+    "angular-touch": "^1.5.8",
+    "ui-navbar": "^0.4.3",
+    "bootstrap-sass": "^3.3.7",
+    "angular-sanitize": "^1.5.8",
+    "ng-dialog": "^0.6.4"
+  },
+  "overrides": {
+    "bootstrap-sass": {
+      "main": [],
+      "dependencies": null
+    },
+    "ui-navbar": {
+      "main": [
+        "release/js/ui-navbar.js",
+        "release/css/ui-navbar.css"
+      ]
+    }
+  },
+  "resolutions": {
+    "angular": "^1.5.8"
+  }
+}
