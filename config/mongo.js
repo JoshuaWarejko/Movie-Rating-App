@@ -10,8 +10,8 @@ function Mongo() {
       port: '27017',
       db: 'movierating',
       credentials: {
-        user: "joshuawarejko",
-        pass: "thebled13",
+        user: "",
+        pass: "",
         auth: {
           authdb: 'admin'
         }
@@ -22,8 +22,8 @@ function Mongo() {
       port: '27017',
       db: 'movierating',
       credentials: {
-        user: "joshuawarejko",
-        pass: "thebled13",
+        user: "",
+        pass: "",
         auth: {
           authdb: 'admin'
         }
