@@ -47,7 +47,7 @@ var shopUrl;
 if (env === "production") {
   baseUrl = '';
 } else { // Development
-  baseUrl = '//localhost:3010';
+  baseUrl = '//localhost:3000';
 }
 
 angular.module('app.constants', [])
@@ -111,8 +111,8 @@ angular.module('app.factories', [])
   function logout() {
   	return $q(function(resolve, reject) {
       $http.post(CONFIG.url + '/users/logout').then(function(response) {
-        $cookies.remove('connect.sid');
         $rootScope.currentUser = null;
+        $cookies.remove('connect.sid');
     		return resolve("Successfully logged out!");
       }, function(error) {
         $cookies.remove('connect.sid');
