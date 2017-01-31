@@ -14,26 +14,6 @@ angular.module('app.routes', ['ui.router'])
 	});
 	
 	$urlMatcherFactoryProvider.strictMode(false);
-
-	$httpProvider.interceptors.push(function ($timeout, $q, $injector) {
-		var $http, $state;
-
-		// this trick must be done so that we don't receive
-		// `Uncaught Error: [$injector:cdep] Circular dependency found`
-		$timeout(function () {
-			$http = $injector.get('$http');
-			$state = $injector.get('$state');
-		});
-
-		return {
-			responseError: function (rejection) {
-				if (rejection.status !== 401) {
-					return rejection;
-				}
-				$state.go('login');
-			}
-		};
-	});
   
   $stateProvider
   .state('404', {
@@ -48,7 +28,15 @@ angular.module('app.routes', ['ui.router'])
 	.state('index', {
 		url: '',
 		templateUrl: '/templates/homepage.html',
-		controller: 'HomepageController'
+		controller: 'HomepageController',
+		authenticate: true
+	})
+
+	// Login
+	.state('login', {
+		url: '/login',
+		templateUrl: '/templates/login.html',
+		controller: 'LoginController'
 	})
 
 	;

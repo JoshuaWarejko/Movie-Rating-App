@@ -14,15 +14,29 @@ var app = angular.module('MovieRating', [
 	'app.directives',
 	'app.constants',
 	'app.filters'
-]);
-app.run(function ($rootScope, $state, $window) {
-  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-  	var stateData = toState.data;
-  	
-  	if($window.error && toState.name !== '404') {
-  		$state.go('404', {
-  			error: $window.error
-  		});
+])
+.run(function ($rootScope, $state, Auth, $window, $cookies) {
+
+  // Check if user is Authenticated
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+
+		if (!$cookies.get('connect.sid') && toState.name !== 'login' && toState.authenticate) {
+	  	event.preventDefault();
+	  	$state.go('login');
+	  }
+
+  	if (!$rootScope.page_title && $window.page_title) {
+  		$rootScope.page_title = $window.page_title;
   	}
+
   });
+
+  $rootScope.$on('$stateChangeSuccess', function() {
+		document.body.scrollTop = document.documentElement.scrollTop = 0;
+	});
+
+  if (!$rootScope.currentUser && $cookies.get('connect.sid')) {
+    Auth.refresh();
+  }
+
 });

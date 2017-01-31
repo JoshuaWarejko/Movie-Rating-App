@@ -1,0 +1,27 @@
+<div class="container">
+	<div ng-controller="NavigationController" class="header_inner">
+		<div class="user text-right" ng-init="dropdown = false" ng-if="currentUser">
+			<div class="person-wrap">
+				<a href="#">{{currentUser.email}}</a>
+				<div class="dropdown">
+					<ul class="list-unstyled">
+						<li class="logout"><a href="" ng-click="logout()">Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar" role="navigation">
+			<div class="navbar-header center-mobile">
+				<button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed"><span class="sr-only">Toggle navigation</span><span class="icon-menu3"></span></button>
+				<a class="navbar-brand image-wrap" ui-sref="index"><img src="../img/movies_24.png" alt="Movie Rating App" /></a>
+			</div>
+			<div class="collapse navbar-collapse text-right" ng-class="!navCollapsed && 'in'">
+				<ul class="nav navbar-nav">
+					<li ui-sref-active-eq="active">
+						<a ui-sref="index" ng-click="navCollapsed=true" uib-dropdown-toggle>Dashboard</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</div>

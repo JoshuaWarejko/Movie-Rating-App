@@ -1,5 +1,180 @@
-/** Main Styles Go Here **/
+/* Whole Site Variables */
 
+$turquoise: #38bdb8;
+$lightestBlue: #cdedfa;
+$lightBlue: #00a7e1;
+$regBlue: #1668ac;
+$darkBlue: #1368aa;
+$darkGrey: #4d4d4d;
+$mainGrey: #b3b3b3;
+$lightGrey: #868686;
+$red: #a94442;
+
+$brand-primary: #81bc41;
+$text-color: #000000;
+
+$font-size-h1: 40px;
+$font-size-h2: 30px;
+$font-size-h3: 26px;
+$font-size-h4: 20px;
+$font-size-huge: 45px;
+$font-size-large: 22px;
+$font-size-medium: 18px;
+$font-size-small: 16px;
+$font-size-base: 20px;
+$font-size-extra-small: 14px;
+$line-height-base: 1.2;
+
+$btn-primary-bg: $darkBlue;
+$btn-default-bg: transparent;
+$btn-color: #fff;
+$header-height: 50px;
+
+/* Whole Site Mixins */
+
+@mixin prefix($name, $argument) {
+	-webkit-#{$name}: #{$argument};
+	-ms-#{$name}: #{$argument};
+	-moz-#{$name}: #{$argument};
+	-o-#{$name}: #{$argument};
+	#{$name}: #{$argument};
+}
+
+@mixin placeholderNew() {
+	&::-webkit-input-placeholder {@content}
+	&:-moz-placeholder           {@content}
+	&::-moz-placeholder          {@content}
+	&:-ms-input-placeholder      {@content}  
+}
+
+%easeTrans {
+	@include prefix(transition, .3s ease all);
+}
+
+/* Whole Site Font Stacks */
+
+
+/* Included Sass Files */
+@import "../lib/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "header";
+
+/* Whole Site Styles */
+.col-xs-5th, .col-sm-5th, .col-md-5th, .col-lg-5th {
+	position: relative;
+	min-height: 1px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.col-xs-5th {
+	width: 20%;
+	float: left;
+}
+@media (min-width: 768px) {
+	.col-sm-5th {
+		width: 20%;
+		float: left;
+	}
+}
+@media (min-width: 992px) {
+	.col-md-5th {
+		width: 20%;
+		float: left;
+	}
+}
+@media (min-width: 1200px) {
+	.col-lg-5th {
+		width: 20%;
+		float: left;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+  .display-table {
+    font-size: 0;
+    > div {
+      float: none;
+      font-size: initial;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+html, html body {
+	overflow-x: hidden;
+}
+
+html, html body, html body * {
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration: none !important;
+	outline: none;
+	.btn {
+		outline: none !important;
+	}
+	a {
+		outline: none !important;
+	}
+}
 h1 {
-	color: red;
+	margin-top: 0;
+}
+h4, .h4 {
+	font-size: $font-size-h4;
+}
+.text-center {
+	text-align: center;
+}
+.container {
+	@media only screen and (min-width: 1200px) {
+		width: 1200px;
+	}
+}
+.content {
+	padding: 50px 0;
+	@media only screen and (max-width: 767px) {
+		padding: 25px 0;
+	}
+}
+.children-inline-block {
+	font-size: 0;
+	> div {
+		display: inline-block;
+		font-size: initial;
+		vertical-align: middle;
+	}
+}
+.image-wrap img {
+	display: block;
+}
+@media only screen and (max-width: 767px) {
+	.container {
+		max-width: 85%;
+		width: 85%;
+		margin: 0 auto;
+	}
+	.left-mobile {
+		text-align: left;
+	}
+	.center-mobile {
+		text-align: center;
+	}
+	.block-mobile {
+		display: block;
+	}
+	.hide-mobile {
+		display: none !important;
+	}
+}
+@media only screen and (min-width: 768px) {
+	.hide-desktop {
+		display: none;
+	}
+}
+.ng-animate.ng-scope {
+	@include prefix(transition, none !important);
+}
+.alert-text {
+	color: $red;
 }

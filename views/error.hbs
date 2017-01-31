@@ -4,4 +4,8 @@
 	window.error.status = "{{{ status }}}";
 	{{#if stack}}window.error.stack = {{{ stack }}};{{/if}}
 </script>
-<div ui-view class="body-padding"></div>
+<div id="wrapper">
+	<header></header>
+  <div data-ui-view></div>
+  <footer></footer>
+</div>

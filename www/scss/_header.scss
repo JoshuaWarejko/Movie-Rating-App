@@ -1,0 +1,119 @@
+header {
+	border-bottom: 1px solid $brand-primary;
+	.header_inner {
+		padding-top: 10px;
+		.user {
+			margin-bottom: 20px;
+			a {
+				color: $text-color;
+			}
+			.person-wrap {
+				position: relative;
+				display: inline-block;
+				.dropdown {
+					position: absolute;
+					right: 0;
+					width: 100%;
+					opacity: 0;
+					@include prefix(transition, 0.3s ease-in-out);
+					ul {
+						margin: 0;
+						border: 1px solid rgba(0,0,0,.2);
+						display: block;
+						li a {
+							padding: 5px;
+							display: block;
+							&:hover {
+								background: $brand-primary;
+								color: #fff;
+							}
+						}
+					}
+				}
+				&:hover .dropdown {
+					opacity: 1;
+				}
+			}
+		}
+		.navbar {
+			margin: 0;
+			border: 0 none;
+			font-size: 0;
+			> div {
+				font-size: initial;
+				@media only screen and (min-width: 768px) {
+					display: inline-block !important;
+					vertical-align: middle;
+					&.navbar-header {
+						width: 18%;
+					}
+					&.navbar-collapse {
+						width: 82%;
+					}
+				}
+				&.navbar-header {
+					float: none;
+					.navbar-toggle {
+						background: #000;
+					}
+					.navbar-brand {
+						height: auto;
+						max-width: 195px;
+						float: none;
+						display: block;
+						padding: 0;
+						img {
+							width: 100%;
+						}
+					}
+				}
+				&.navbar-collapse {
+					padding: 0;
+					.nav {
+						display: table;
+						margin-left: auto;
+						margin-right: -30px;
+						height: $header-height;
+						li {
+							padding: 0 30px;
+							height: $header-height;
+							a {
+								color: $text-color;
+								padding: 0;
+								height: $header-height;
+								line-height: $header-height;
+								&::after {
+									content: "";
+									display: block;
+									width: 100%;
+									position: absolute;
+									bottom: -2px;
+									background: $brand-primary;
+									height: 3px;
+									visibility: hidden;
+								}
+								&:hover, &:focus {
+									background: none;
+									&::after {
+										visibility: initial;
+									}
+								}
+							}
+							&:hover, &.active {
+								a::after {
+									visibility: initial;
+								}
+							}
+							&.active a {
+								font-weight: 700;
+							}
+						}
+						&.navbar-nav {
+							float: none !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,25 +1,32 @@
-var express        = require('express'),
-    path           = require('path'),
-    favicon        = require('serve-favicon'),
-    logger         = require('morgan'),
-    sassMiddleware = require('node-sass-middleware'),
-    cookieParser   = require('cookie-parser'),
-    bodyParser     = require('body-parser'),
-    mongoose       = require('mongoose'),
-    session        = require('express-session'),
-    MongoStore     = require('connect-mongo')(session);
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var sassMiddleware = require('node-sass-middleware');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var rootDir = require('app-root-path').path;
 
-// Create App
 app = module.exports = express();
 
 // Load Libs
-var MongoConnection = require('./config/mongo').connection;
-
-app.use(logger('dev'));
+var MongoConnection = require(rootDir + '/config/mongo')(app).connection;
 
 // mongodb connection
 mongoose.connect(MongoConnection.uri, MongoConnection.db, MongoConnection.port, MongoConnection.credentials);
 var db = mongoose.connection;
+
+// Setup Auth Sessions
+app.use(session({
+  secret: '!aAFLL%1WQPp',
+  store: new MongoStore({ mongooseConnection: db }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { httpOnly: false }
+}));
 
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -31,7 +38,7 @@ app.set('view engine', 'hbs');
 // Set CORS policy
 app.use('*', function(req, res, next) {
   var allowedOrigins = [
-    'http://localhost:3000'
+    'http://localhost:3010'
   ];
   var origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){
@@ -43,10 +50,12 @@ app.use('*', function(req, res, next) {
 });
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 if (app.get('env') !== 'development') {
   app.use(sassMiddleware({
     root: __dirname,
@@ -63,59 +72,35 @@ if (app.get('env') !== 'development') {
 // Setup Public Directory
 app.use(express.static(path.join(__dirname, 'www')));
 
-
 // API Routes
-var index = require('./routes/index');
-var users = require('./routes/users');
-app.use('/', index);
-app.use('/users', users);
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
-
-/*
- * error handlers
- */
-
+// development error handler
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  res.locals.title = "Page Not Found | Movie Rating App";
   var err = new Error('Sorry, the page or file you are looking for does not exist.');
   err.status = 404;
-  err.name = 'Page Not Found';
+  err.name = 'Not Found';
   next(err);
 });
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    if (req.xhr) {
-      res.json(err);
-    } else {
-      res.render('error', {
-        title: err.name,
-        message: err.message,
-        status: err.status,
-        stack: JSON.stringify(err.stack),
-        env: app.get('env')
-      });
-    }
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
+// error handler
 app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.name = err.name;
+  res.locals.message = err.message;
+  res.locals.status = err.status;
+  res.locals.url = req.protocol + '://' + req.get("host") + req.originalUrl;
+  // res.locals.stack = req.app.get('env') === 'development' ? err.stack : null;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
   res.status(err.status || 500);
-  if (req.xhr) {
-      res.json(err);
-  } else {
-    res.render('error', {
-      title: err.name,
-      message: err.message,
-      status: err.status,
-      env: app.get('env')
-    });
-  }
+  console.log(res.locals);
+  res.render('error');
+
 });
 
 

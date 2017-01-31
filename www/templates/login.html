@@ -1,0 +1,24 @@
+<div data-ui-view>
+	<div class="container">
+		<div class="content">
+			<div class="form-wrapper">
+				<form name="signin" novalidate ng-submit="login()">
+					<div class="form_body">
+						<div class="form-group">
+							<label for="name">Email</label>
+							<input type="text" id="name" class="form-control" name="email" ng-model="credentials.email" />
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" id="password" class="form-control" name="password" ng-model="credentials.password" />
+						</div>
+					</div>
+					<div class="alert alert-danger" ng-if="loginError">{{loginError}}</div>
+					<div class="form_footer">
+						<input type="submit" class="btn btn-primary" value="Submit" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

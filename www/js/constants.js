@@ -1,13 +1,11 @@
-var env = env || "development";
+var env = window.env || "development";
 var baseUrl;
 var shopUrl;
 
-if (env === "production" || env === "prod" || env === "staging" || env === "stage") {
-  baseUrl = 'http://localhost:3000';
-  baseUrl = 'http://localhost:3000';
+if (env === "production") {
+  baseUrl = '';
 } else { // Development
-  baseUrl = 'http://localhost:3000';
-  baseUrl = 'http://localhost:3000';
+  baseUrl = '//localhost:3010';
 }
 
 angular.module('app.constants', [])
@@ -18,6 +16,5 @@ angular.module('app.constants', [])
   timeFormat: 'h:mm a',
   dateTimeFormat: 'M/d/yyyy h:mm a',
   url: baseUrl,
-  shopUrl: shopUrl,
   socketUrl: baseUrl
 });

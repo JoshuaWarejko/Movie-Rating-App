@@ -33,4 +33,6 @@ function Mongo() {
   this.connection = connections[app.get('env')];
 }
 
-module.exports = new Mongo();
+module.exports = function(app) {
+  return new Mongo(app);
+};

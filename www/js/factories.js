@@ -1,25 +1,49 @@
-'use strict';
-
 angular.module('app.factories', [])
 
-.factory('AuthService', function($cookies) {
+.factory('Auth', function($rootScope, $http, $state, $q, CONFIG, $window, $cookies) {
 
-	// Default to False
-	var isAuthenticated = false;
+	function login(email, password) {
+    console.log("Factory login function hit!");
+    return $q(function(resolve, reject) {
+      $http.post(CONFIG.url + '/users/login', {email: email, password: password}).then(function(response) {
+        console.log("The factory login response: ", response);
+        return resolve(response.data);
+      }, function(error) {
+        console.log("The factory login error: ", error);
+        return reject(error);
+      });   
+    });
+  }
 
-	// Store Logged in Status
-	function loadUserCredentials() {
-		console.log($cookies);
-		if ($cookies.testCookie)
-			isAuthenticated = true;
-	}
+  function logout() {
+  	return $q(function(resolve, reject) {
+      $http.post(CONFIG.url + '/users/logout').then(function(response) {
+        $rootScope.currentUser = null;
+        $cookies.remove('connect.sid');
+    		return resolve("Successfully logged out!");
+      }, function(error) {
+        $cookies.remove('connect.sid');
+        return reject('Failed to log out user');
+      });
+  	}); 
+  }
 
-	// Check credentials on load
-	loadUserCredentials();
+  function refresh() {
+    return $http.post(CONFIG.url + '/users/refresh').then(function(response) {
+      var user = response.data;
+      $rootScope.currentUser = {
+        id: user.id,
+        email: user.email
+      };
+    }, function(error) {
+      console.error("Error loading user on refresh: ", error);
+    });
+  }
 
-	return {
-		isAuthenticated: function() {return isAuthenticated;},
-		update: loadUserCredentials
-	};
+  return {
+  	login: login,
+  	logout: logout,
+    refresh: refresh
+  }
+
 })
-;

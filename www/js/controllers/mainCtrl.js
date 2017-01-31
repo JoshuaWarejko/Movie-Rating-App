@@ -1,9 +1,28 @@
 'use strict';
 
-angular.module('app.controllers', ['app.errorController', 'app.homeController'])
+angular.module('app.controllers', ['app.main_controllers', 'app.errorController', 'app.homeController', 'app.login_controllers']);
 
-.controller('MainController', function($rootScope, $scope, $state, $filter, $window) {
 
-	$rootScope.currentStateId = null;
+angular.module('app.main_controllers', [])
 
-});
+.controller('MainController', function($rootScope, $scope, $state, $filter, $window, timeService, Auth) {
+
+	$rootScope.currentUser = null;
+
+	$rootScope.today = timeService.getToday();
+	$rootScope.currentYear = new Date($rootScope.today).getFullYear();
+	$rootScope.rightNow = new Date();
+
+	$scope.logout = function() {
+		Auth.logout().then(function(response) {
+			console.log("The logout response: ", response);
+			$window.location.reload();
+		})
+	}
+
+})
+
+.controller('NavigationController', function($rootScope, $scope, $state) {
+	$scope.nav = "Navigation Text";
+})
+;

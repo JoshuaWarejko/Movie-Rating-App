@@ -14,10 +14,16 @@
   <link rel="stylesheet" type="text/css" href="/assets/vendor.css">
   <link rel="stylesheet" type="text/css" href="/assets/styles.css">
 
+  <!-- Set Server Variables -->
+  <script type="text/javacsript">
+    window.page_title = "{{ title }}";
+    window.env = "{{ env }}";
+  </script>
+
   <!-- Load AngularJS Framework & App -->
   <script type="text/javascript" src="/assets/vendor.js"></script>
-  <script type="text/javacsript">var env = "{{{ env }}}";</script>
-  <script type="text/javascript" src="/assets/app.js"></script>
+  <script type="text/javascript" src="/assets/appFinal.js"></script>
+  <link rel="shortcut icon" href="/favicon.png" type="image/png" />
 
 </head>
 <body ng-controller="MainController">
