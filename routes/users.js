@@ -5,7 +5,10 @@ var User = require(rootDir + '/models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  User.find({}).exec(function(err, users) {
+  	if(err) return next(err);
+  	res.json(users);
+  });
 });
 
 // POST /register

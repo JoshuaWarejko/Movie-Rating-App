@@ -75,6 +75,9 @@ app.use(express.static(path.join(__dirname, 'www')));
 // API Routes
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+app.use('/movies', require('./routes/movies'));
+app.use('/reviews', require('./routes/reviews'));
+app.use('/comments', require('./routes/comments'));
 
 // development error handler
 // catch 404 and forward to error handler
