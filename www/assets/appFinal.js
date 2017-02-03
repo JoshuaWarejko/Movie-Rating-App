@@ -47,7 +47,7 @@ var shopUrl;
 if (env === "production") {
   baseUrl = '';
 } else { // Development
-  baseUrl = '//localhost:3000';
+  baseUrl = '//localhost:3000/api';
 }
 
 angular.module('app.constants', [])
@@ -95,11 +95,22 @@ angular.module('app.factories', [])
 
 .factory('Auth', ["$rootScope", "$http", "$state", "$q", "CONFIG", "$window", "$cookies", function($rootScope, $http, $state, $q, CONFIG, $window, $cookies) {
 
+  function register(form) {
+    console.log("Factory register function hit!");
+    return $q(function(resolve, reject) {
+      $http.post(CONFIG.url + '/users/register', form).then(function(response) {
+        console.log("The factory register response: ", response);
+        return resolve(response.data);
+      }, function(error) {
+        console.log("The factory register error: ", error);
+        return reject(error);
+      });   
+    });
+  }
+
 	function login(email, password) {
-    console.log("Factory login function hit!");
     return $q(function(resolve, reject) {
       $http.post(CONFIG.url + '/users/login', {email: email, password: password}).then(function(response) {
-        console.log("The factory login response: ", response);
         return resolve(response.data);
       }, function(error) {
         console.log("The factory login error: ", error);
@@ -134,6 +145,7 @@ angular.module('app.factories', [])
   }
 
   return {
+    register: register,
   	login: login,
   	logout: logout,
     refresh: refresh
@@ -141,6 +153,13 @@ angular.module('app.factories', [])
 
 }])
 angular.module('app.filters', [])
+
+.filter('dateSeparator', ["$filter", function($filter) {
+	var angularDateFilter = $filter('date');
+	return function(theDate, separator) {
+		return angularDateFilter(theDate, 'MM' + separator + 'dd' + separator + 'yyyy');
+	}
+}])
 
 ;
 'use strict';
@@ -169,19 +188,40 @@ angular.module('app.routes', ['ui.router'])
 		}
 	})
 
-	// Homepage
-	.state('index', {
-		url: '',
-		templateUrl: '/templates/homepage.html',
-		controller: 'HomepageController',
-		authenticate: true
-	})
-
 	// Login
 	.state('login', {
 		url: '/login',
 		templateUrl: '/templates/login.html',
 		controller: 'LoginController'
+	})
+
+	// Register
+	.state('register', {
+		url: '/register',
+		templateUrl: '/templates/register.html',
+		controller: 'RegisterController'
+	})
+
+	// Homepage
+	.state('index', {
+		url: '',
+		templateUrl: '/templates/homepage.html',
+		controller: 'HomepageController'
+	})
+
+	// Homepage
+	.state('index.movies', {
+		url: '/movies',
+		templateUrl: '/templates/movies.html',
+		controller: 'MoviesController'
+	})
+
+	// Profile
+	.state('index.profile', {
+		url: '/profile',
+		templateUrl: '/templates/profile.html',
+		controller: 'ProfileController',
+		authenticate: true
 	})
 
 	;
@@ -210,8 +250,20 @@ angular.module('app.routes', ['ui.router'])
 
 angular.module('app.services', [])
 
-.service('BlankService', ["$http", "CONFIG", function($http, CONFIG) {
-
+.service('MovieService', ["$http", "CONFIG", "$q", function($http, CONFIG, $q) {
+	this.getMovies = function() {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movies').then(function(response) {
+				if(response.data.length > 0) {
+					return resolve(response);
+				} else {
+					return reject("No movies yet");
+				}
+			}, function(error) {
+				return reject("Error loading movies");
+			});
+		});
+	};
 }])
 
 .service('timeService', ["$filter", "CONFIG", function($filter, CONFIG) {
@@ -52790,7 +52842,7 @@ angular.module('app.homeController', [])
 }]);
 angular.module('app.login_controllers', [])
 
-.controller('LoginController', ["$rootScope", "$scope", "Auth", function($rootScope, $scope, Auth) {
+.controller('LoginController', ["$rootScope", "$scope", "$state", "Auth", function($rootScope, $scope, $state, Auth) {
 
 	$scope.credentials = {
 		username: '',
@@ -52804,6 +52856,7 @@ angular.module('app.login_controllers', [])
 		console.log("Login function hit!");
 		Auth.login($scope.credentials.email, $scope.credentials.password).then(function(response) {
 			$rootScope.currentUser = response;
+			$state.go('index.profile');
 		}, function(error) {
 			console.error("Error while logging in: ", error);
 			$scope.loginError = error.data;
@@ -52814,7 +52867,15 @@ angular.module('app.login_controllers', [])
 
 'use strict';
 
-angular.module('app.controllers', ['app.main_controllers', 'app.errorController', 'app.homeController', 'app.login_controllers']);
+angular.module('app.controllers', [
+	'app.main_controllers', 
+	'app.errorController', 
+	'app.homeController', 
+	'app.login_controllers', 
+	'app.profile_controller',
+	'app.register_controller',
+	'app.movies_controllers'
+	]);
 
 
 angular.module('app.main_controllers', [])
@@ -52840,3 +52901,55 @@ angular.module('app.main_controllers', [])
 	$scope.nav = "Navigation Text";
 }])
 ;
+angular.module('app.movies_controllers', [])
+
+.controller('MoviesController', ["$rootScope", "$scope", "$state", "MovieService", function($rootScope, $scope, $state, MovieService) {
+
+	$scope.moviesError = null;
+	$scope.movies = null;
+
+	MovieService.getMovies().then(function(response) {
+		$scope.moviesError = null;
+		$scope.movies = response.data;
+	}, function(error) {
+		console.error(error);
+		$scope.moviesError = error.data;
+	});
+
+}]);
+
+angular.module('app.profile_controller', [])
+
+.controller('ProfileController', ["$rootScope", "$scope", "Auth", function($rootScope, $scope, Auth) {
+
+	$scope.profileStuff = "Some profile stuff";
+
+}]);
+angular.module('app.register_controller', [])
+
+.controller('RegisterController', ["$rootScope", "$scope", "$state", "Auth", function($rootScope, $scope, $state, Auth) {
+
+	$scope.form = {
+		firstName: '',
+		lastName: '',
+		email: '',
+		password: '',
+		confirmPassword: ''
+	}
+
+	$scope.registerError = null;
+
+	$scope.signup = function() {
+		$scope.registerError = null;
+		console.log("Register function hit!");
+		Auth.register($scope.form).then(function(response) {
+			console.log("The register response: ", response);
+			$rootScope.currentUser = response.data;
+			$state.go('index.profile');
+		}, function(error) {
+			console.error("Error while registering: ", error);
+			$scope.registerError = error.data;
+		});
+	}
+
+}]);

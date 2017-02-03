@@ -7,6 +7,7 @@ var Comment = require(rootDir + '/models/comment');
 
 router.get('/', function(req, res, next) {
 	Comment.find({}).exec(function(err, comments) {
+		if(err) return next(err);
 		res.json(comments);
 	})
 });

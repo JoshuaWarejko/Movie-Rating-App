@@ -20,6 +20,21 @@
 					<li ui-sref-active-eq="active">
 						<a ui-sref="index" ng-click="navCollapsed=true" uib-dropdown-toggle>Dashboard</a>
 					</li>
+					<li ui-sref-active-eq="active">
+						<a ui-sref="index.movies" ng-click="navCollapsed=true" uib-dropdown-toggle>Movies</a>
+					</li>
+					<li ui-sref-active-eq="active" ng-if="!currentUser">
+						<a ui-sref="login" ng-click="navCollapsed=true" uib-dropdown-toggle>Login</a>
+					</li>
+					<li ui-sref-active-eq="active" ng-if="!currentUser">
+						<a ui-sref="register" ng-click="navCollapsed=true" uib-dropdown-toggle>Register</a>
+					</li>
+					<li ui-sref-active-eq="active" ng-if="currentUser">
+						<a ui-sref="index.profile" ng-click="navCollapsed=true" uib-dropdown-toggle>Profile</a>
+					</li>
+					<li ui-sref-active-eq="active" ng-if="currentUser">
+						<a href="" ng-click="navCollapsed=true && logout()" uib-dropdown-toggle>Logout</a>
+					</li>
 				</ul>
 			</div>
 		</nav>

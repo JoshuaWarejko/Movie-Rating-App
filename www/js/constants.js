@@ -5,7 +5,7 @@ var shopUrl;
 if (env === "production") {
   baseUrl = '';
 } else { // Development
-  baseUrl = '//localhost:3000';
+  baseUrl = '//localhost:3000/api';
 }
 
 angular.module('app.constants', [])

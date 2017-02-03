@@ -24,19 +24,40 @@ angular.module('app.routes', ['ui.router'])
 		}
 	})
 
-	// Homepage
-	.state('index', {
-		url: '',
-		templateUrl: '/templates/homepage.html',
-		controller: 'HomepageController',
-		authenticate: true
-	})
-
 	// Login
 	.state('login', {
 		url: '/login',
 		templateUrl: '/templates/login.html',
 		controller: 'LoginController'
+	})
+
+	// Register
+	.state('register', {
+		url: '/register',
+		templateUrl: '/templates/register.html',
+		controller: 'RegisterController'
+	})
+
+	// Homepage
+	.state('index', {
+		url: '',
+		templateUrl: '/templates/homepage.html',
+		controller: 'HomepageController'
+	})
+
+	// Homepage
+	.state('index.movies', {
+		url: '/movies',
+		templateUrl: '/templates/movies.html',
+		controller: 'MoviesController'
+	})
+
+	// Profile
+	.state('index.profile', {
+		url: '/profile',
+		templateUrl: '/templates/profile.html',
+		controller: 'ProfileController',
+		authenticate: true
 	})
 
 	;

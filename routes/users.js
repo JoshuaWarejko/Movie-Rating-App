@@ -3,7 +3,7 @@ var router = express.Router();
 var rootDir = require('app-root-path').path;
 var User = require(rootDir + '/models/user');
 
-/* GET users listing. */
+// GET / used for retrieving all users
 router.get('/', function(req, res, next) {
   User.find({}).exec(function(err, users) {
   	if(err) return next(err);
@@ -13,13 +13,16 @@ router.get('/', function(req, res, next) {
 
 // POST /register
 router.post('/register', function(req,res,next) {
-	if (req.body.email && req.body.password && req.body.confirmPassword) {
+	console.log(req.body);
+	if (req.body.firstName && req.body.lastName && req.body.email && req.body.password && req.body.confirmPassword) {
 		// Confirm that user typed same password twice
 		if(req.body.password !== req.body.confirmPassword) {
 			return res.status(400).send("Passwords do not match");
 		}
 		// create object with form input
 		var userData = {
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
 			email: req.body.email,
 			password: req.body.password
 		};
@@ -28,7 +31,16 @@ router.post('/register', function(req,res,next) {
 			if(error) {
 				return next(error);
 			} else {
-				res.json({success: true, user: user});
+				req.session.user = user;
+				res.json({
+					success: true, 
+					data: {
+						id: user._id,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email
+					} 
+				});
 			}
 		});
 
@@ -37,7 +49,7 @@ router.post('/register', function(req,res,next) {
 	}
 });
 
-/* GET users by id. */
+// GET /id used for getting users by id
 router.get('/:id', function(req, res, next) {
   User.findById(req.params.id).exec(function(err, user) {
   	if(err) return next(err);
@@ -55,7 +67,12 @@ router.post('/login', function(req,res,next) {
 			} else {
 				req.session.user = user;
 				console.log("The user: ", user);
-				return res.json({ id: user._id, email: user.email });
+				return res.json({
+					id: user._id,
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email
+				});
 			}
 		});
 	} else {
@@ -63,6 +80,7 @@ router.post('/login', function(req,res,next) {
 	}
 });
 
+// POST on /refresh used for getting user after page reloads
 router.post('/refresh', function(req, res, next) {
 	if (req.session.user) {
 		res.json({id: req.session.user._id, email: req.session.user.email});
@@ -71,6 +89,7 @@ router.post('/refresh', function(req, res, next) {
 	}
 });
 
+// POST /logout
 router.post('/logout', function(req, res, next) {
 	req.session.destroy(function(err) {
 		if(err) return next(err);

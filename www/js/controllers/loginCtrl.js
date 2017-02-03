@@ -1,6 +1,6 @@
 angular.module('app.login_controllers', [])
 
-.controller('LoginController', function($rootScope, $scope, Auth) {
+.controller('LoginController', function($rootScope, $scope, $state, Auth) {
 
 	$scope.credentials = {
 		username: '',
@@ -14,6 +14,7 @@ angular.module('app.login_controllers', [])
 		console.log("Login function hit!");
 		Auth.login($scope.credentials.email, $scope.credentials.password).then(function(response) {
 			$rootScope.currentUser = response;
+			$state.go('index.profile');
 		}, function(error) {
 			console.error("Error while logging in: ", error);
 			$scope.loginError = error.data;

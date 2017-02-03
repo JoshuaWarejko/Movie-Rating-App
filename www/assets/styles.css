@@ -7890,6 +7890,39 @@ header .header_inner .navbar > div.navbar-collapse .nav.navbar-nav {
   float: none !important;
 }
 
+footer .footer_inner {
+  background: #4d4d4d;
+  padding: 15px 0;
+}
+
+footer .footer_inner ul {
+  margin: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  footer .footer_inner ul {
+    font-size: 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  footer .footer_inner ul li {
+    display: inline-block;
+    font-size: initial;
+  }
+  footer .footer_inner ul li:not(:last-of-type) {
+    margin-right: 50px;
+  }
+}
+
+footer .footer_inner ul li a {
+  color: #fff;
+}
+
+footer .footer_inner .copyright {
+  color: #fff;
+}
+
 /* Whole Site Styles */
 .col-xs-5th, .col-sm-5th, .col-md-5th, .col-lg-5th {
   position: relative;

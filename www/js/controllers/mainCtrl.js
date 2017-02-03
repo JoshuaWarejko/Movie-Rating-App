@@ -1,6 +1,14 @@
 'use strict';
 
-angular.module('app.controllers', ['app.main_controllers', 'app.errorController', 'app.homeController', 'app.login_controllers']);
+angular.module('app.controllers', [
+	'app.main_controllers', 
+	'app.errorController', 
+	'app.homeController', 
+	'app.login_controllers', 
+	'app.profile_controller',
+	'app.register_controller',
+	'app.movies_controllers'
+	]);
 
 
 angular.module('app.main_controllers', [])

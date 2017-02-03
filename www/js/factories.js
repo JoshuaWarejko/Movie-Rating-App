@@ -2,11 +2,22 @@ angular.module('app.factories', [])
 
 .factory('Auth', function($rootScope, $http, $state, $q, CONFIG, $window, $cookies) {
 
+  function register(form) {
+    console.log("Factory register function hit!");
+    return $q(function(resolve, reject) {
+      $http.post(CONFIG.url + '/users/register', form).then(function(response) {
+        console.log("The factory register response: ", response);
+        return resolve(response.data);
+      }, function(error) {
+        console.log("The factory register error: ", error);
+        return reject(error);
+      });   
+    });
+  }
+
 	function login(email, password) {
-    console.log("Factory login function hit!");
     return $q(function(resolve, reject) {
       $http.post(CONFIG.url + '/users/login', {email: email, password: password}).then(function(response) {
-        console.log("The factory login response: ", response);
         return resolve(response.data);
       }, function(error) {
         console.log("The factory login error: ", error);
@@ -41,6 +52,7 @@ angular.module('app.factories', [])
   }
 
   return {
+    register: register,
   	login: login,
   	logout: logout,
     refresh: refresh

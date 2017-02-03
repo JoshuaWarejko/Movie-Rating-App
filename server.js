@@ -49,8 +49,7 @@ app.use('*', function(req, res, next) {
   next();
 });
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'www/img', 'movie.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -74,10 +73,12 @@ app.use(express.static(path.join(__dirname, 'www')));
 
 // API Routes
 app.use('/', require('./routes/index'));
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movies'));
-app.use('/reviews', require('./routes/reviews'));
-app.use('/comments', require('./routes/comments'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/movies', require('./routes/movies'));
+app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/comments', require('./routes/comments'));
+app.use('/api/events', require('./routes/events'));
+app.use('/api/posts', require('./routes/posts'));
 
 // development error handler
 // catch 404 and forward to error handler

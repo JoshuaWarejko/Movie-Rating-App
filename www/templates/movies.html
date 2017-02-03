@@ -1,0 +1,31 @@
+<div data-ui-view id="movies">
+	<div class="container">
+		<div class="content">
+			<h1>Welcome to the Movies Page</h1>
+			<div class="movies-wrapper">
+				<div class="movie" ng-repeat="movie in movies">
+					<h2>{{movie.title}}</h2>
+					<h2>{{movie.releaseDate | dateSeparator: "-"}}</h2>
+					<div class="writers" ng-if="movie.directors.length > 0">
+						<h3>Director(s)</h3>
+						<ul>
+							<li ng-repeat="director in movie.directors">{{director}}</li>
+						</ul>
+					</div>
+					<div class="stars" ng-if="movie.stars.length > 0">
+						<h3>Star(s)</h3>
+						<ul>
+							<li ng-repeat="star in movie.stars">{{star}}</li>
+						</ul>
+					</div>
+					<div class="writers" ng-if="movie.writers.length > 0">
+						<h3>Writer(s)</h3>
+						<ul>
+							<li ng-repeat="writer in movie.writers">{{writer}}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

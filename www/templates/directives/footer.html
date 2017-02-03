@@ -4,6 +4,9 @@
 			<div class="col-sm-6 center-mobile">
 				<ul class="list-unstyled">
 					<li><a ui-sref="index">Dashboard</a></li>
+					<li><a ui-sref="index.movies">Movies</a></li>
+					<li ng-if="currentUser"><a ui-sref="index.profile">Profile</a></li>
+					<li ng-if="currentUser"><a href="" ng-click="logout()" uib-dropdown-toggle>Logout</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-6">
