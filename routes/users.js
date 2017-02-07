@@ -83,7 +83,7 @@ router.post('/login', function(req,res,next) {
 // POST on /refresh used for getting user after page reloads
 router.post('/refresh', function(req, res, next) {
 	if (req.session.user) {
-		res.json({id: req.session.user._id, email: req.session.user.email});
+		res.json({id: req.session.user._id, email: req.session.user.email, firstName: req.session.user.firstName, lastName: req.session.user.lastName});
 	} else {
 		res.status(401).json({error: 'Not Authenticated'});
 	}

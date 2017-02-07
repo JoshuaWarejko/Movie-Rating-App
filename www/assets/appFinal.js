@@ -137,7 +137,9 @@ angular.module('app.factories', [])
       var user = response.data;
       $rootScope.currentUser = {
         id: user.id,
-        email: user.email
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
       };
     }, function(error) {
       console.error("Error loading user on refresh: ", error);
