@@ -58,7 +58,8 @@ angular.module('app.constants', [])
   timeFormat: 'h:mm a',
   dateTimeFormat: 'M/d/yyyy h:mm a',
   url: baseUrl,
-  socketUrl: baseUrl
+  socketUrl: baseUrl,
+  omdbUrl: 'http://www.omdbapi.com/'
 });
 'use strict';
 
@@ -266,6 +267,18 @@ angular.module('app.services', [])
 			});
 		});
 	};
+}])
+
+.service('OMDBService', ["$http", "CONFIG", "$q", function($http, CONFIG, $q) {
+	this.getMovieByTitle = function(title, year) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.omdbUrl + '?s=' + title + '&y=' + year + '&r=json').then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
 }])
 
 .service('timeService', ["$filter", "CONFIG", function($filter, CONFIG) {
@@ -52905,7 +52918,7 @@ angular.module('app.main_controllers', [])
 ;
 angular.module('app.movies_controllers', [])
 
-.controller('MoviesController', ["$rootScope", "$scope", "$state", "MovieService", function($rootScope, $scope, $state, MovieService) {
+.controller('MoviesController', ["$rootScope", "$scope", "$state", "MovieService", "OMDBService", function($rootScope, $scope, $state, MovieService, OMDBService) {
 
 	$scope.moviesError = null;
 	$scope.movies = null;
@@ -52916,6 +52929,13 @@ angular.module('app.movies_controllers', [])
 	}, function(error) {
 		console.error(error);
 		$scope.moviesError = error.data;
+	});
+	
+	OMDBService.getMovieByTitle('Lone Survivor', '').then(function(response) {
+		console.log('The response from OMDB', response);
+		$scope.omdb = response;
+	}, function(error) {
+		console.error(error);
 	});
 
 }]);

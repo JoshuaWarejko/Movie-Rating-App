@@ -75,10 +75,9 @@ app.use(express.static(path.join(__dirname, 'www')));
 app.use('/', require('./routes/index'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/movies', require('./routes/movies'));
-app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/movie-track', require('./routes/movie_tracks'));
 app.use('/api/comments', require('./routes/comments'));
-app.use('/api/events', require('./routes/events'));
-app.use('/api/posts', require('./routes/posts'));
+app.use('/api/movie-search', require('./routes/movie_search'));
 
 // development error handler
 // catch 404 and forward to error handler

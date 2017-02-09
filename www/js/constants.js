@@ -16,5 +16,6 @@ angular.module('app.constants', [])
   timeFormat: 'h:mm a',
   dateTimeFormat: 'M/d/yyyy h:mm a',
   url: baseUrl,
-  socketUrl: baseUrl
+  socketUrl: baseUrl,
+  omdbUrl: 'http://www.omdbapi.com/'
 });

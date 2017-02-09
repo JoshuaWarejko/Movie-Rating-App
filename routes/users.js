@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var rootDir = require('app-root-path').path;
 var User = require(rootDir + '/models/user');
+var MovieTrack = require(rootDir + '/models/movie_track')
 
 // GET / used for retrieving all users
 router.get('/', function(req, res, next) {
