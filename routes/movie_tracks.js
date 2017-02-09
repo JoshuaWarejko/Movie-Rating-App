@@ -3,7 +3,6 @@ var router = express.Router();
 var rootDir = require('app-root-path').path;
 var User = require(rootDir + '/models/user');
 var Movie = require(rootDir + '/models/movie');
-var Review = require(rootDir + '/models/review');
 var MovieTrack = require(rootDir + '/models/movie_track');
 
 // GET / used to retrieve all reviews.
