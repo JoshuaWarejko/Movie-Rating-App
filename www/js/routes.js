@@ -45,7 +45,7 @@ angular.module('app.routes', ['ui.router'])
 		controller: 'HomepageController'
 	})
 
-	// Homepage
+	// Movies
 	.state('index.movies', {
 		url: '/movies',
 		templateUrl: '/templates/movies.html',

@@ -15,7 +15,11 @@ var MovieTrackSchema = new mongoose.Schema({
 	review: {
 		text: { type: String },
 		rating: { type: Number, min: 1, max: 5 }
-	}
+	},
+	comments: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Comment'
+	}]
 });
 
 var MovieTrack = mongoose.model('MovieTrack', MovieTrackSchema);

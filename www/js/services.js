@@ -19,9 +19,9 @@ angular.module('app.services', [])
 })
 
 .service('OMDBService', function($http, CONFIG, $q) {
-	this.getMovieByTitle = function(title, year) {
+	this.getMoviesByTitle = function(title) {
 		return $q(function(resolve, reject) {
-			$http.get(CONFIG.omdbUrl + '?s=' + title + '&y=' + year + '&r=json').then(function(response) {
+			$http.get(CONFIG.url + '/movie-search/' + title).then(function(response) {
 				return resolve(response);
 			}, function(error) {
 				return reject(error);

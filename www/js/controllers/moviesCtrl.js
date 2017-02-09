@@ -4,20 +4,17 @@ angular.module('app.movies_controllers', [])
 
 	$scope.moviesError = null;
 	$scope.movies = null;
-
-	MovieService.getMovies().then(function(response) {
-		$scope.moviesError = null;
-		$scope.movies = response.data;
-	}, function(error) {
-		console.error(error);
-		$scope.moviesError = error.data;
-	});
+	$scope.movie_search = {
+		search: ''
+	};
 	
-	OMDBService.getMovieByTitle('Lone Survivor', '').then(function(response) {
-		console.log('The response from OMDB', response);
-		$scope.omdb = response;
-	}, function(error) {
-		console.error(error);
-	});
+	$scope.getMovies = function(title) {
+		OMDBService.getMoviesByTitle(title).then(function(response) {
+			console.log('The response from OMDB', response);
+			$scope.movies = response.data.results;
+		}, function(error) {
+			console.error(error);
+		});
+	}
 
 });
