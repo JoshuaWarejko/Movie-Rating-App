@@ -1,0 +1,14 @@
+.inline-inputs {
+	font-size: 0;
+	> div {
+		display: inline-block;
+		font-size: initial;
+		vertical-align: middle;
+		&:not(:last-of-type) {
+			margin-right: 10px;
+		}
+	}
+}
+.inline-label {
+	display: inline-block;
+}

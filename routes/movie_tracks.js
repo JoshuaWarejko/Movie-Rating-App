@@ -15,44 +15,60 @@ router.get('/', function(req, res, next) {
 
 // GET / used to retrieve movies tracked for specific user.
 router.get('/:userId', function(req, res, next) {
-	MovieTrack.find({user: req.params.userId}).populate('user').populate('movie').populate('review').exec(function(err, movie_tracks) {
+	MovieTrack.find({user: req.params.userId}).populate('movie').populate('comments').exec(function(err, movie_tracks) {
 		if(err) return next(err);
 		res.json(movie_tracks);
 	});
 });
 
-// // POST / used for posting new reviews.
-// router.post('/', function(req, res, next) {
+// POST / used for posting new movies tracked.
+router.post('/', function(req, res, next) {
 
-// 	if(req.body.text && req.body.rating && req.body.userId && req.body.movieId) {
-// 		var date = new Date().toISOString();
-// 		User.findById(req.body.userId).exec(function(err1, user) {
-// 			if(err1) return next(err1);
-// 			var userId = user._id;
-
-// 			Movie.findById(req.body.movieId).exec(function(err2, movie) {
-// 				if(err2) return next(err2);
-// 				var movieId = movie._id;
-// 				var newReview = new Review({
-// 					text: req.body.text,
-// 					rating: req.body.rating,
-// 					date: date,
-// 					user: userId,
-// 					movie: movieId
-// 				});
-
-// 				Review.create(newReview, function(err, review) {
-// 					if(err) return next(err);
-// 					res.json({ status: 200, review: review });
-// 				});
-
-// 			});
-// 		});
-
-// 	} else {
-// 		return res.status(401).send("All fields required");
-// 	}
-// });
+	if(req.body.movie && req.body.tracked) {
+		if(req.body.userId) {
+			var date = new Date().toISOString();
+			Movie.findOne({omdbId: req.body.movie.id}, function(err, existingMovie) {
+				if(existingMovie) {
+					console.log("Movie already exists. Creating Movie Track!");
+					var movieTrack = new MovieTrack({
+						createdDate: date,
+						updatedDate: date,
+						dateWatched: req.body.tracked.date_watched,
+						user: req.body.userId,
+						movie: existingMovie._id
+					});
+					MovieTrack.create(movieTrack, function(err, movieTrack) {
+						if(err) return next(err);
+						res.json({success: true, movieTrack: movieTrack});
+					});
+				} else {
+					Movie.create(req.body.movie, function(err, movie) {
+						if(err) return next(err);
+						var movieTrack = new MovieTrack({
+							createdDate: date,
+							updatedDate: date,
+							dateWatched: req.body.tracked.date_watched,
+							user: req.body.userId,
+							movie: movie._id,
+							review: {
+								text: req.body.tracked.review_text,
+								rating: parseInt(req.body.tracked.rating)
+							}
+						});
+						MovieTrack.create(movieTrack, function(err, movieTrack) {
+							if(err) return next(err);
+							res.json({success: true, movieTrack: movieTrack});
+						});
+					});
+				}
+			});
+		} else {
+			return res.status(401).send("No user to track movie for found");
+		}
+	} else {
+		return res.status(401).send("All fields required");
+	}
+});
 
 
 // GET / used for getting all movies tracked by a user.

@@ -14,24 +14,10 @@ router.get('/', function(req, res, next) {
 
 // POST / used to post a new movie
 router.post('/', function(req, res, next) {
-
-	if(req.body.title) {
-		var newMovie = new Movie({
-			title: req.body.title,
-			directors: req.body.directors,
-			writers: req.body.writers,
-			stars: req.body.stars,
-			releaseDate: req.body.releaseDate
-		});
-
-		Movie.create(newMovie, function(err, movie) {
-			if(err) return next(err);
-			res.json({success: true, movie: movie});
-		})
-	} else {
-		return res.status(401).send("Title is required");
-	}
-
+	Movie.create(req.body, function(err, movie) {
+		if(err) return next(err);
+		res.json({success: true, movie: movie});
+	});
 });
 
 module.exports = router;

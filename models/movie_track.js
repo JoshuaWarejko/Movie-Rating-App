@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
 var MovieTrackSchema = new mongoose.Schema({
-	date: { type: Date, required: true },
+	createdDate: { type: Date, required: true },
+	updatedDate: { type: Date, required: true },
+	dateWatched: { type: Date, required: true },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',

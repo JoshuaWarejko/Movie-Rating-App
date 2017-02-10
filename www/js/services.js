@@ -30,6 +30,18 @@ angular.module('app.services', [])
 	}
 })
 
+.service('MovieTrackService', function($http, CONFIG, $q) {
+	this.getTrackedMovies = function(userId) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-tracks/' + userId).then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject({ message: "Error loading tracked movies", error: error});
+			});
+		});
+	}
+})
+
 .service('timeService', function($filter, CONFIG) {
 	this.getToday = function(){
 		return $filter('date')(new Date(), CONFIG.dateFormat);

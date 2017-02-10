@@ -58,6 +58,8 @@ $header-height: 50px;
 @import "../lib/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "header";
 @import "footer";
+@import "form-styles";
+@import "dialog-styles";
 
 /* Whole Site Styles */
 .col-xs-5th, .col-sm-5th, .col-md-5th, .col-lg-5th {
@@ -147,7 +149,8 @@ h4, .h4 {
 	}
 }
 .image-wrap img {
-	display: block;
+	display: inline-block;
+	width: 100%;
 }
 @media only screen and (max-width: 767px) {
 	.container {
@@ -178,4 +181,20 @@ h4, .h4 {
 }
 .alert-text {
 	color: $red;
+}
+
+._720kb-datepicker-calendar-day {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+}
+
+._720kb-datepicker-calendar-days-header div {
+    font-size: 10px;
+    padding: 0 !important;
+}
+
+._720kb-datepicker-calendar-body {
+    margin: 0 3px;
 }

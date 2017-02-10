@@ -7923,6 +7923,45 @@ footer .footer_inner .copyright {
   color: #fff;
 }
 
+.inline-inputs {
+  font-size: 0;
+}
+
+.inline-inputs > div {
+  display: inline-block;
+  font-size: initial;
+  vertical-align: middle;
+}
+
+.inline-inputs > div:not(:last-of-type) {
+  margin-right: 10px;
+}
+
+.inline-label {
+  display: inline-block;
+}
+
+.track_movie .track-movie-inner h2 {
+  margin-top: 0;
+}
+
+.track_movie .track-movie-inner h2 span {
+  font-size: 20px;
+}
+
+.track_movie .track-movie-inner .track-movie-body .form-wrap .form_footer .form-group.pull-left {
+  min-width: 180px;
+}
+
+.track_movie .track-movie-inner .track-movie-body .form-wrap .form_footer .form-group.pull-left select {
+  display: inline-block;
+  width: 40%;
+}
+
+.track_movie .track-movie-inner input#date_watched {
+  text-indent: 5px;
+}
+
 /* Whole Site Styles */
 .col-xs-5th, .col-sm-5th, .col-md-5th, .col-lg-5th {
   position: relative;
@@ -8028,7 +8067,8 @@ h4, .h4 {
 }
 
 .image-wrap img {
-  display: block;
+  display: inline-block;
+  width: 100%;
 }
 
 @media only screen and (max-width: 767px) {
@@ -8067,6 +8107,22 @@ h4, .h4 {
 
 .alert-text {
   color: #a94442;
+}
+
+._720kb-datepicker-calendar-day {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0;
+}
+
+._720kb-datepicker-calendar-days-header div {
+  font-size: 10px;
+  padding: 0 !important;
+}
+
+._720kb-datepicker-calendar-body {
+  margin: 0 3px;
 }
 
 /*# sourceMappingURL=styles.css.map */

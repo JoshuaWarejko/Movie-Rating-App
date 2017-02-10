@@ -1,0 +1,21 @@
+.track_movie .track-movie-inner {
+	h2 {
+		margin-top: 0;
+		span {
+			font-size: 20px;
+		}
+	}
+	.track-movie-body .form-wrap .form_footer {
+		.form-group.pull-left {
+			min-width: 180px;
+			select {
+				display: inline-block;
+				width: 40%;
+			}
+		}
+	}
+	input#date_watched {
+		text-indent: 5px;
+	}
+}
+

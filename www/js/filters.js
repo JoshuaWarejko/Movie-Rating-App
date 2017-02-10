@@ -7,4 +7,13 @@ angular.module('app.filters', [])
 	}
 })
 
+.filter('dateYearOnly', function($filter) {
+	var angularDateFilter = $filter('date');
+	return function(theDate) {
+		var date = new Date(theDate);
+		var year = date.getFullYear();
+		return year;
+	}
+})
+
 ;

@@ -1,11 +1,66 @@
 <div class="track-movie-inner">
-	<div class="track-movie-header">
+	<div class="track-movie-header" ng-if="!movie_selected">
 		<h2>Enter movie title to begin.</h2>
 	</div>
 	<div class="track-movie-body">
-		<div class="form-group">
+		<div class="form-group first-step" ng-hide="movie_selected">
 			<label for="movie_search" class="sr-only">Movie Search</label>
-			<input type="text" id="movie_search" class="form-group" ng-model="movie_search" />
+			<input type="text" id="movie_search" class="form-control" ng-model="movie_search" ng-change="getNewResults()" />
+			<ul class="results list-unstyled">
+				<li ng-repeat="item in search_items"><a href="" ng-click="selectMovie(item)">{{item.title}}&nbsp;({{item.release_date | dateYearOnly}})</a></li>
+			</ul>
+		</div>
+		<div class="second-step" ng-if="movie_selected">
+			<div class="btn-wrapper">
+				<a href="" class="btn btn-secondary" ng-click="backToSelect()">< Back</a>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="image-wrap">
+						<img ng-src="https://image.tmdb.org/t/p/w500{{chosen.movie.poster_path}}" alt="{{chosen.movie.title}}" />
+					</div>
+				</div>
+				<div class="col-sm-9">
+					<h2>{{chosen.movie.title}}&nbsp;<span>{{chosen.movie.release_date | dateYearOnly}}</span></h2>
+					<div class="form-wrap">
+						<form name="track_movie_form" novalidate ng-submit="track_movie_form.$valid && saveMovie()">
+							<div class="form_body">
+								<div class="inline-inputs">
+									<div class="form-group">
+										<input type="checkbox" name="include_date" id="include_date" ng-model="include_date" />
+										<label for="include_date" ng-if="!include_date">Include the date you watched it.</label>
+									</div>
+									<div class="form-group" ng-if="include_date">
+										<label for="date_watched" class="sr-only">Date Watched</label>
+										<datepicker date-format="MM/dd/yyyy" date-max-limit="{{today}}">
+											<input type="text" name="date_watched" id="date_watched" ng-model="tracked.date_watched" />
+										</datepicker>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="review_text" class="sr-only">Leave a review</label>
+									<textarea class="form-control" rows="5" name="review_text" id="review_text" ng-model="tracked.review_text" placeholder="Leave a review..."></textarea>
+								</div>
+							</div>
+							<div class="form_footer">
+								<div class="form-group pull-left">
+								<label for="rating" class="inline-label">Rating</label>
+									<select class="form-control" id="rating" ng-model="tracked.rating">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+								<div class="form-group pull-right">
+									<input type="submit" class="btn btn-primary" value="Save" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>			
 		</div>
 	</div>
 </div>
