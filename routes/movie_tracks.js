@@ -27,36 +27,53 @@ router.post('/', function(req, res, next) {
 	if(req.body.movie && req.body.tracked) {
 		if(req.body.userId) {
 			var date = new Date().toISOString();
+			var movieTrackData = {
+				createdDate: date,
+				updatedDate: date,
+				dateWatched: req.body.tracked.date_watched,
+				user: req.body.userId,
+				movie: null,
+				review: {
+					text: req.body.tracked.review_text,
+					rating: parseInt(req.body.tracked.rating)
+				},
+				rewatch: false
+			}
+			// Check if movie object already exists in our database
 			Movie.findOne({omdbId: req.body.movie.id}, function(err, existingMovie) {
 				if(existingMovie) {
 					console.log("Movie already exists. Creating Movie Track!");
-					var movieTrack = new MovieTrack({
-						createdDate: date,
-						updatedDate: date,
-						dateWatched: req.body.tracked.date_watched,
-						user: req.body.userId,
-						movie: existingMovie._id
-					});
-					MovieTrack.create(movieTrack, function(err, movieTrack) {
+					movieTrackData.movie = existingMovie._id;
+					// Check if user has already tracked this movie
+					MovieTrack.find({movie: existingMovie._id, user: req.body.userId}).exec(function(err, movie_track) {
 						if(err) return next(err);
-						res.json({success: true, movieTrack: movieTrack});
+						if(movie_track && movie_track.length > 0) {
+							console.log("The movie track response: ", movie_track);
+							console.log("Movie already tracked by user, marking as rewatch!");
+							movieTrackData.rewatch = true;
+							var movieTrack = new MovieTrack(movieTrackData);
+							MovieTrack.create(movieTrack, function(err, movieTrack) {
+								if(err) return next(err);
+								res.json({success: true, movieTrack: movieTrack});
+							});
+						} else {
+							console.log("Movie has never been tracked! Creating new instance...");
+							var movieTrack = new MovieTrack(movieTrackData);
+							MovieTrack.create(movieTrack, function(err, movieTrack) {
+								if(err) return next(err);
+								res.json({success: true, movieTrack: movieTrack});
+							});
+						}
 					});
 				} else {
 					Movie.create(req.body.movie, function(err, movie) {
+						console.log("Movie doesn't exist. Creating new movie instance...");
 						if(err) return next(err);
-						var movieTrack = new MovieTrack({
-							createdDate: date,
-							updatedDate: date,
-							dateWatched: req.body.tracked.date_watched,
-							user: req.body.userId,
-							movie: movie._id,
-							review: {
-								text: req.body.tracked.review_text,
-								rating: parseInt(req.body.tracked.rating)
-							}
-						});
+						movieTrackData.movie = movie._id;
+						var movieTrack = new MovieTrack(movieTrackData);
 						MovieTrack.create(movieTrack, function(err, movieTrack) {
 							if(err) return next(err);
+							console.log("New moview track created!");
 							res.json({success: true, movieTrack: movieTrack});
 						});
 					});
@@ -70,40 +87,5 @@ router.post('/', function(req, res, next) {
 	}
 });
 
-
-// GET / used for getting all movies tracked by a user.
-router.get('/:userId/movies-tracked', function(req, res, next) {
-	MovieTrack.find({ "user": req.params.userId }).populate('movie').exec(function(err, movieTracks) {
-		if(err) return next(err);
-		res.json(movieTracks);
-	})
-});
-
-// POST /:userId/track-movie used for posting a tracked movie for a specific user.
-router.post('/:userId/track-movie', function(req, res, next) {
-	var date = new Date().toISOString();
-	if(req.body.date) {
-		date = req.body.date;
-	}
-	if(req.body.movieId) {
-		var movieTrackData = new MovieTrack({
-			date: date,
-			user: req.params.userId,
-			movie: req.body.movieId
-		});
-		MovieTrack.create(movieTrackData, function(err, movieTrack) {
-			if(err) return next(err);
-			res.json({ status: 200, movieTrack: movieTrack });
-			// var today = new Date().toISOString();
-			// var eventData = new Event({
-			// 	date: today,
-			// 	eventObject: req.body.movieId,
-
-			// });
-		})
-	} else {
-		return res.status(401).send("All fields required");
-	}
-});
 
 module.exports = router;

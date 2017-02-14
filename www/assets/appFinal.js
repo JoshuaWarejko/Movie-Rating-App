@@ -300,6 +300,15 @@ angular.module('app.services', [])
 			});
 		});
 	}
+	this.checkMovieTrackedStatus = function(userId, movieId) {
+		return $q(function(resolve, reject) {
+			$http.post(CONFIG.url + '/movie-tracks/status', {userId: userId, movieId: movieId}).then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject({ message: "No movie or user found to track", error: error});
+			});
+		});
+	}
 }])
 
 .service('timeService', ["$filter", "CONFIG", function($filter, CONFIG) {
@@ -53026,6 +53035,7 @@ angular.module('app.profile_controller', [])
 			userId: $rootScope.currentUser.id
 		}).then(function(response) {
 			console.log("The movie track response: ", response);
+			ngDialog.close();
 		}, function(error) {
 			console.error(error);
 			$scope.trackError = error;

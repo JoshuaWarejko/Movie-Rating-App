@@ -21,7 +21,8 @@ var MovieTrackSchema = new mongoose.Schema({
 	comments: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Comment'
-	}]
+	}],
+	rewatch: { type: Boolean, required: true }
 });
 
 var MovieTrack = mongoose.model('MovieTrack', MovieTrackSchema);

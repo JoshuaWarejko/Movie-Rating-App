@@ -66,6 +66,7 @@ angular.module('app.profile_controller', [])
 			userId: $rootScope.currentUser.id
 		}).then(function(response) {
 			console.log("The movie track response: ", response);
+			ngDialog.close();
 		}, function(error) {
 			console.error(error);
 			$scope.trackError = error;
