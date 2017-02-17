@@ -2,6 +2,8 @@ angular.module('app.profile_controller', [])
 
 .controller('ProfileController', function($rootScope, $scope, Auth, ngDialog, MovieTrackService) {
 
+	$scope.trackedMovies = [];
+
 	// Function to open the dialog popup for tracking movies
 	$scope.trackMovie = function() {
 		ngDialog.open({
@@ -15,12 +17,16 @@ angular.module('app.profile_controller', [])
 	}
 
 	// Load the users tracked movies
-	MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
-		console.log("The user's tracked movies!", response);
-		$scope.trackedMovies = response.data;
-	}, function(error) {
-		console.error(error);
+	$rootScope.$on('reloadTrackedMovies', function() {
+		MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
+			console.log("The user's tracked movies!", response);
+			$scope.trackedMovies = response.data;
+		}, function(error) {
+			console.error(error);
+		});
 	});
+
+	$rootScope.$broadcast('reloadTrackedMovies');
 
 })
 
@@ -58,7 +64,7 @@ angular.module('app.profile_controller', [])
 		$scope.chosen.movie = null;
 	}
 
-	$scope.saveMovie = function() {
+	$scope.saveMovieTrack = function() {
 		$scope.chosen.movie.omdbId = $scope.chosen.movie.id;
 		$http.post(CONFIG.url + '/movie-tracks', {
 			movie: $scope.chosen.movie,
@@ -67,6 +73,7 @@ angular.module('app.profile_controller', [])
 		}).then(function(response) {
 			console.log("The movie track response: ", response);
 			ngDialog.close();
+			$rootScope.$broadcast('reloadTrackedMovies');
 		}, function(error) {
 			console.error(error);
 			$scope.trackError = error;

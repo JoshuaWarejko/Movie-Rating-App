@@ -291,21 +291,21 @@ angular.module('app.services', [])
 }])
 
 .service('MovieTrackService', ["$http", "CONFIG", "$q", function($http, CONFIG, $q) {
-	this.getTrackedMovies = function(userId) {
+	this.getAllTracked = function() {
 		return $q(function(resolve, reject) {
-			$http.get(CONFIG.url + '/movie-tracks/' + userId).then(function(response) {
+			$http.get(CONFIG.url + '/movie-tracks/').then(function(response) {
 				return resolve(response);
 			}, function(error) {
 				return reject({ message: "Error loading tracked movies", error: error});
 			});
 		});
 	}
-	this.checkMovieTrackedStatus = function(userId, movieId) {
+	this.getTrackedMovies = function(userId) {
 		return $q(function(resolve, reject) {
-			$http.post(CONFIG.url + '/movie-tracks/status', {userId: userId, movieId: movieId}).then(function(response) {
+			$http.get(CONFIG.url + '/movie-tracks/' + userId).then(function(response) {
 				return resolve(response);
 			}, function(error) {
-				return reject({ message: "No movie or user found to track", error: error});
+				return reject({ message: "Error loading tracked movies", error: error});
 			});
 		});
 	}
@@ -52880,9 +52880,23 @@ angular.module('app.errorController', [])
 
 angular.module('app.homeController', [])
 
-.controller('HomepageController', ["$rootScope", "$scope", "$state", "$filter", "$window", function($rootScope, $scope, $state, $filter, $window) {
+.controller('HomepageController', ["$rootScope", "$scope", "$state", "$filter", "$window", "MovieTrackService", function($rootScope, $scope, $state, $filter, $window, MovieTrackService) {
 
-	$scope.pageTitle = "Homepage";
+	$scope.trackedMovies = [];
+
+	MovieTrackService.getAllTracked().then(function(response) {
+		var tracked = $scope.trackedMovies = response.data;
+		if(tracked.length == 0) {
+			$scope.noTrackedMessage = "No movies have been tracked yet!";
+		}
+		for(var i = 0; i < tracked.length; i++) {
+			var dateArray = new Date(tracked[i].updatedDate).toLocaleTimeString().split(':');
+			var ampm = new Date(tracked[i].updatedDate).toLocaleTimeString().split(' ')[1];
+			$scope.trackedMovies[i].time = dateArray[0].toString() + ':' + dateArray[1].toString() + ' ' + ampm;
+		}
+	}, function(error) {
+		console.error(error);
+	})
 
 }]);
 angular.module('app.login_controllers', [])
@@ -52971,6 +52985,8 @@ angular.module('app.profile_controller', [])
 
 .controller('ProfileController', ["$rootScope", "$scope", "Auth", "ngDialog", "MovieTrackService", function($rootScope, $scope, Auth, ngDialog, MovieTrackService) {
 
+	$scope.trackedMovies = [];
+
 	// Function to open the dialog popup for tracking movies
 	$scope.trackMovie = function() {
 		ngDialog.open({
@@ -52984,12 +53000,16 @@ angular.module('app.profile_controller', [])
 	}
 
 	// Load the users tracked movies
-	MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
-		console.log("The user's tracked movies!", response);
-		$scope.trackedMovies = response.data;
-	}, function(error) {
-		console.error(error);
+	$rootScope.$on('reloadTrackedMovies', function() {
+		MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
+			console.log("The user's tracked movies!", response);
+			$scope.trackedMovies = response.data;
+		}, function(error) {
+			console.error(error);
+		});
 	});
+
+	$rootScope.$broadcast('reloadTrackedMovies');
 
 }])
 
@@ -53027,7 +53047,7 @@ angular.module('app.profile_controller', [])
 		$scope.chosen.movie = null;
 	}
 
-	$scope.saveMovie = function() {
+	$scope.saveMovieTrack = function() {
 		$scope.chosen.movie.omdbId = $scope.chosen.movie.id;
 		$http.post(CONFIG.url + '/movie-tracks', {
 			movie: $scope.chosen.movie,
@@ -53036,6 +53056,7 @@ angular.module('app.profile_controller', [])
 		}).then(function(response) {
 			console.log("The movie track response: ", response);
 			ngDialog.close();
+			$rootScope.$broadcast('reloadTrackedMovies');
 		}, function(error) {
 			console.error(error);
 			$scope.trackError = error;

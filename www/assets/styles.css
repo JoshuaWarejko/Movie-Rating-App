@@ -7962,6 +7962,10 @@ footer .footer_inner .copyright {
   text-indent: 5px;
 }
 
+.profile-tracked-movies .tracked_movie .movie_image {
+  max-width: 150px;
+}
+
 /* Whole Site Styles */
 .col-xs-5th, .col-sm-5th, .col-md-5th, .col-lg-5th {
   position: relative;

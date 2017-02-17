@@ -7,7 +7,7 @@ var MovieTrack = require(rootDir + '/models/movie_track');
 
 // GET / used to retrieve all reviews.
 router.get('/', function(req, res, next) {
-	MovieTrack.find({}).populate('user').populate('movie').populate('review').exec(function(err, movie_tracks) {
+	MovieTrack.find({}).populate('user', '-password').populate('movie').populate('comments').exec(function(err, movie_tracks) {
 		if(err) return next(err);
 		res.json(movie_tracks);
 	});

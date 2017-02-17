@@ -31,21 +31,21 @@ angular.module('app.services', [])
 })
 
 .service('MovieTrackService', function($http, CONFIG, $q) {
-	this.getTrackedMovies = function(userId) {
+	this.getAllTracked = function() {
 		return $q(function(resolve, reject) {
-			$http.get(CONFIG.url + '/movie-tracks/' + userId).then(function(response) {
+			$http.get(CONFIG.url + '/movie-tracks/').then(function(response) {
 				return resolve(response);
 			}, function(error) {
 				return reject({ message: "Error loading tracked movies", error: error});
 			});
 		});
 	}
-	this.checkMovieTrackedStatus = function(userId, movieId) {
+	this.getTrackedMovies = function(userId) {
 		return $q(function(resolve, reject) {
-			$http.post(CONFIG.url + '/movie-tracks/status', {userId: userId, movieId: movieId}).then(function(response) {
+			$http.get(CONFIG.url + '/movie-tracks/' + userId).then(function(response) {
 				return resolve(response);
 			}, function(error) {
-				return reject({ message: "No movie or user found to track", error: error});
+				return reject({ message: "Error loading tracked movies", error: error});
 			});
 		});
 	}
