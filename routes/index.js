@@ -37,4 +37,25 @@ router.get('/movies', function(req, res, next) {
   });
 });
 
+router.get('/movies/:movieId', function(req, res, next) {
+  res.render('index', {
+    title: 'Movie | Movie Rating App',
+    env: req.app.get('env')
+  });
+});
+
+router.get('/person', function(req, res, next) {
+  res.render('index', {
+    title: 'Person | Movie Rating App',
+    env: req.app.get('env')
+  });
+});
+
+router.get('/person/:personId', function(req, res, next) {
+  res.render('index', {
+    title: 'Person | Movie Rating App',
+    env: req.app.get('env')
+  });
+});
+
 module.exports = router;

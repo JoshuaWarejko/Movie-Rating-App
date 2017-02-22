@@ -11,13 +11,18 @@
 					<input type="submit" class="btn btn-primary" value="Search" />
 				</div>
 			</form>
-			<div class="movies-wrapper">
-				<div class="movie" ng-repeat="movie in movies">
-					<h2>{{movie.title}}</h2>
-					<h2>{{movie.release_date}}</h2>
-					<div class="image-wrap" ng-if="movie.poster_path">
-						<img ng-src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" alt="{{movie.title}}" />
-					</div>
+			<div class="alert-text" ng-if="noMovies">{{noMovies}}</div>
+			<div class="movies-wrapper row">
+				<div class="movie col-sm-6 col-md-3 text-center" ng-repeat="movie in movies">
+					<a ui-sref="index.movies.movie({movieId: movie.id})">
+						<div class="image-wrap clearfix" ng-if="movie.poster_path">
+							<div class="image" style="background-image:url('https://image.tmdb.org/t/p/w500{{movie.poster_path}}');"></div>
+						</div>
+						<div class="image-wrap clearfix" ng-if="!movie.poster_path">
+							<div class="image" style="background-image:url('../img/no_image_available.png');"></div>
+						</div>
+						<h4>{{movie.title}}</h4>
+					</a>
 				</div>
 			</div>
 		</div>

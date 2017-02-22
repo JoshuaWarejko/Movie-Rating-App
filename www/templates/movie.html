@@ -1,0 +1,11 @@
+<div class="container">
+	<div class="content">
+		<h1>{{movie.title}}</h1>
+		<div class="image-wrap">
+			<img ng-src="https://image.tmdb.org/t/p/w1920{{movie.backdrop_path}}" alt="{{movie.title}}" />
+		</div>
+		<div class="cast">
+			<div class="cast-member pull-left" ng-repeat="member in movie.credits.cast"><a ui-sref="index.person({personId: member.id})">{{member.name}}</a></div>
+		</div>
+	</div>
+</div>

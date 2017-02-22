@@ -7,7 +7,9 @@ angular.module('app.controllers', [
 	'app.login_controllers', 
 	'app.profile_controller',
 	'app.register_controller',
-	'app.movies_controllers'
+	'app.movies_controller',
+	'app.movie_controller',
+	'app.person_controller'
 	]);
 
 

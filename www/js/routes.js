@@ -28,28 +28,54 @@ angular.module('app.routes', ['ui.router'])
 	.state('login', {
 		url: '/login',
 		templateUrl: '/templates/login.html',
-		controller: 'LoginController'
+		controller: 'LoginController',
+		authenticate: false
 	})
 
 	// Register
 	.state('register', {
 		url: '/register',
 		templateUrl: '/templates/register.html',
-		controller: 'RegisterController'
+		controller: 'RegisterController',
+		authenticate: false
 	})
 
 	// Homepage
 	.state('index', {
 		url: '',
 		templateUrl: '/templates/homepage.html',
-		controller: 'HomepageController'
+		controller: 'HomepageController',
+		authenticate: false
 	})
 
 	// Movies
 	.state('index.movies', {
 		url: '/movies',
 		templateUrl: '/templates/movies.html',
-		controller: 'MoviesController'
+		controller: 'MoviesController',
+		authenticate: false
+	})
+
+	// Movies
+	.state('index.movies.movie', {
+		url: '/{movieId}',
+		templateUrl: '/templates/movie.html',
+		controller: 'MovieController',
+		params: {
+			movieId: null
+		},
+		authenticate: false
+	})
+
+	// Movies
+	.state('index.person', {
+		url: '/person/{personId}',
+		templateUrl: '/templates/person.html',
+		controller: 'PersonController',
+		params: {
+			personId: null
+		},
+		authenticate: false
 	})
 
 	// Profile

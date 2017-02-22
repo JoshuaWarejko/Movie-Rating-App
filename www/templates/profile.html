@@ -12,9 +12,11 @@
 		<div class="profile-tracked-movies">
 			<div class="tracked_movie" ng-repeat="tracked in trackedMovies">
 				<div class="movie_title">{{tracked.movie.title}}</div>
-				<div class="movie_image image-wrap">
-					<img ng-src="https://image.tmdb.org/t/p/w500{{tracked.movie.poster_path}}" alt="{{tracked.movie.title}}" />
-				</div>
+				<a ui-sref="index.movies.movie({movieId: tracked.movie.omdbId})">
+					<div class="movie_image image-wrap">
+						<img ng-src="https://image.tmdb.org/t/p/w500{{tracked.movie.poster_path}}" alt="{{tracked.movie.title}}" />
+					</div>
+				</a>
 			</div>
 		</div>
 	</div>

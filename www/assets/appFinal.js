@@ -204,28 +204,54 @@ angular.module('app.routes', ['ui.router'])
 	.state('login', {
 		url: '/login',
 		templateUrl: '/templates/login.html',
-		controller: 'LoginController'
+		controller: 'LoginController',
+		authenticate: false
 	})
 
 	// Register
 	.state('register', {
 		url: '/register',
 		templateUrl: '/templates/register.html',
-		controller: 'RegisterController'
+		controller: 'RegisterController',
+		authenticate: false
 	})
 
 	// Homepage
 	.state('index', {
 		url: '',
 		templateUrl: '/templates/homepage.html',
-		controller: 'HomepageController'
+		controller: 'HomepageController',
+		authenticate: false
 	})
 
 	// Movies
 	.state('index.movies', {
 		url: '/movies',
 		templateUrl: '/templates/movies.html',
-		controller: 'MoviesController'
+		controller: 'MoviesController',
+		authenticate: false
+	})
+
+	// Movies
+	.state('index.movies.movie', {
+		url: '/{movieId}',
+		templateUrl: '/templates/movie.html',
+		controller: 'MovieController',
+		params: {
+			movieId: null
+		},
+		authenticate: false
+	})
+
+	// Movies
+	.state('index.person', {
+		url: '/person/{personId}',
+		templateUrl: '/templates/person.html',
+		controller: 'PersonController',
+		params: {
+			personId: null
+		},
+		authenticate: false
 	})
 
 	// Profile
@@ -278,6 +304,7 @@ angular.module('app.services', [])
 	};
 }])
 
+// Used for querying THe Online Movie Database
 .service('OMDBService', ["$http", "CONFIG", "$q", function($http, CONFIG, $q) {
 	this.getMoviesByTitle = function(title) {
 		return $q(function(resolve, reject) {
@@ -288,8 +315,45 @@ angular.module('app.services', [])
 			});
 		});
 	}
+	this.getMovieById = function(id) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/by-id/' + id).then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
+	this.getMovieCreditsById = function(id) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/' + id + "/credits").then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
+	this.getMovieImagesById = function(id) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/' + id + "/images").then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
+	this.getPersonById = function(id) {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/person/' + id).then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
 }])
 
+// Used for handling movies within the local database
 .service('MovieTrackService', ["$http", "CONFIG", "$q", function($http, CONFIG, $q) {
 	this.getAllTracked = function() {
 		return $q(function(resolve, reject) {
@@ -311,6 +375,7 @@ angular.module('app.services', [])
 	}
 }])
 
+// User for returning time based things
 .service('timeService', ["$filter", "CONFIG", function($filter, CONFIG) {
 	this.getToday = function(){
 		return $filter('date')(new Date(), CONFIG.dateFormat);
@@ -52933,7 +52998,9 @@ angular.module('app.controllers', [
 	'app.login_controllers', 
 	'app.profile_controller',
 	'app.register_controller',
-	'app.movies_controllers'
+	'app.movies_controller',
+	'app.movie_controller',
+	'app.person_controller'
 	]);
 
 
@@ -52960,24 +53027,76 @@ angular.module('app.main_controllers', [])
 	$scope.nav = "Navigation Text";
 }])
 ;
-angular.module('app.movies_controllers', [])
+angular.module('app.movie_controller', [])
+
+.controller('MovieController', ["$rootScope", "$scope", "$state", "$stateParams", "MovieService", "OMDBService", function($rootScope, $scope, $state, $stateParams, MovieService, OMDBService) {
+
+	$scope.movieError = null;
+	$scope.movie = null;
+
+	OMDBService.getMovieById($stateParams.movieId).then(function(response) {
+		$scope.movie = response.data;
+		OMDBService.getMovieCreditsById($stateParams.movieId).then(function(response) {
+			console.log("The credits response: ", response);
+			$scope.movie.credits = response.data;
+		}, function(error) {
+			console.error("Error loading movie credits: ", error);
+			$scope.movieError = error;
+		});
+		OMDBService.getMovieImagesById($stateParams.movieId).then(function(response) {
+			console.log("The images response: ", response);
+			$scope.movie.images = response.data;
+		}, function(error) {
+			console.error("Error loading movie images: ", error);
+			$scope.movieError = error;
+		});
+	}, function(error) {
+		console.error("Error loading movie information: ", error);
+		$scope.movieError = error;
+	});
+
+}]);
+
+angular.module('app.movies_controller', [])
 
 .controller('MoviesController', ["$rootScope", "$scope", "$state", "MovieService", "OMDBService", function($rootScope, $scope, $state, MovieService, OMDBService) {
 
 	$scope.moviesError = null;
 	$scope.movies = null;
+	$scope.noMovies = null;
 	$scope.movie_search = {
 		search: ''
 	};
 	
 	$scope.getMovies = function(title) {
+		$scope.noMovies = null;
 		OMDBService.getMoviesByTitle(title).then(function(response) {
 			console.log('The response from OMDB', response);
 			$scope.movies = response.data.results;
+			if($scope.movies.length == 0) {
+				$scope.noMovies = "No movies for search words";
+			}
 		}, function(error) {
 			console.error(error);
 		});
 	}
+
+}]);
+
+angular.module('app.person_controller', [])
+
+.controller('PersonController', ["$rootScope", "$scope", "$state", "$stateParams", "MovieService", "OMDBService", function($rootScope, $scope, $state, $stateParams, MovieService, OMDBService) {
+
+	$scope.personError = null;
+	$scope.person = null;
+
+	OMDBService.getPersonById($stateParams.personId).then(function(response) {
+		console.log("The person response: ", response);
+		$scope.person = response.data;
+	}, function(error) {
+		console.error("Error loading person information: ", error);
+		$scope.personError = error;
+	});
 
 }]);
 

@@ -1,0 +1,32 @@
+#movies {
+	.movies-wrapper {
+		font-size: 0;
+		padding-top: 20px;
+		.movie {
+			font-size: initial;
+			vertical-align: top;
+			@media only screen and (min-width: 768px) {
+				float: none; 
+				display: inline-block;
+			}
+			.image-wrap .image {
+				position: relative;
+				width: 100%;
+				height: 380px;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: cover;
+				@media only screen and (min-width: 992px) and (max-width: 1199px) {
+					width: 210px;
+					height: 330px;
+				}
+				@media only screen and (min-width: 481px) and (max-width: 991px) {
+					height: 500px;
+				}
+				@media only screen and (max-width: 480px) {
+					height: 460px;
+				}
+			}
+		}
+	}
+}
