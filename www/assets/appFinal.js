@@ -224,6 +224,14 @@ angular.module('app.routes', ['ui.router'])
 		authenticate: false
 	})
 
+	// User Feed
+	.state('index.feed', {
+		url: '/feed',
+		templateUrl: '/templates/feed.html',
+		controller: 'FeedController',
+		authenticate: false
+	})
+
 	// Movies
 	.state('index.movies', {
 		url: '/movies',
@@ -345,6 +353,15 @@ angular.module('app.services', [])
 	this.getPersonById = function(id) {
 		return $q(function(resolve, reject) {
 			$http.get(CONFIG.url + '/movie-search/person/' + id).then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
+	this.getPopularMovies = function() {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/popular').then(function(response) {
 				return resolve(response);
 			}, function(error) {
 				return reject(error);
@@ -52941,13 +52958,12 @@ angular.module('app.errorController', [])
 	$scope.error = $window.error || $state.params.error;
 	$window.error = null;
 }]);
-'use strict';
+angular.module('app.feed_controller', [])
 
-angular.module('app.homeController', [])
-
-.controller('HomepageController', ["$rootScope", "$scope", "$state", "$filter", "$window", "MovieTrackService", function($rootScope, $scope, $state, $filter, $window, MovieTrackService) {
+.controller('FeedController', ["$rootScope", "$scope", "$state", "$filter", "$window", "MovieTrackService", "OMDBService", function($rootScope, $scope, $state, $filter, $window, MovieTrackService, OMDBService) {
 
 	$scope.trackedMovies = [];
+	$scope.popularMovies = [];
 
 	MovieTrackService.getAllTracked().then(function(response) {
 		var tracked = $scope.trackedMovies = response.data;
@@ -52961,9 +52977,38 @@ angular.module('app.homeController', [])
 		}
 	}, function(error) {
 		console.error(error);
-	})
+	});
 
 }]);
+'use strict';
+
+angular.module('app.homeController', [])
+
+.controller('HomepageController', ["$rootScope", "$scope", "$state", "$filter", "$window", "MovieTrackService", "OMDBService", function($rootScope, $scope, $state, $filter, $window, MovieTrackService, OMDBService) {
+
+	$scope.popularMovies = [];
+	$scope.myInterval = 5000;
+	$scope.noWrapSlides = false;
+	$scope.active = 0;
+	var popularSlides = $scope.popularSlides = [];
+	var popularSlideIndex = 0;
+  
+	// Get popular movies
+  OMDBService.getPopularMovies().then(function(response) {
+  	var popularMovies = $scope.popularMovies = response.data.results;
+  	for(var i = 0; i < 5; i++) {
+  		$scope.popularSlides.push({
+  			image: 'https://image.tmdb.org/t/p/w1920' + popularMovies[i].backdrop_path,
+  			title: popularMovies[i].title,
+  			id: popularSlideIndex++
+  		});
+  	}
+  }, function(error) {
+  	console.error(error);
+  });
+
+}])
+;
 angular.module('app.login_controllers', [])
 
 .controller('LoginController', ["$rootScope", "$scope", "$state", "Auth", function($rootScope, $scope, $state, Auth) {
@@ -52977,7 +53022,6 @@ angular.module('app.login_controllers', [])
 
 	$scope.login = function() {
 		$scope.loginError = null;
-		console.log("Login function hit!");
 		Auth.login($scope.credentials.email, $scope.credentials.password).then(function(response) {
 			$rootScope.currentUser = response;
 			$state.go('index.profile');
@@ -53000,7 +53044,8 @@ angular.module('app.controllers', [
 	'app.register_controller',
 	'app.movies_controller',
 	'app.movie_controller',
-	'app.person_controller'
+	'app.person_controller',
+	'app.feed_controller'
 	]);
 
 
@@ -53026,6 +53071,9 @@ angular.module('app.main_controllers', [])
 .controller('NavigationController', ["$rootScope", "$scope", "$state", function($rootScope, $scope, $state) {
 	$scope.nav = "Navigation Text";
 }])
+.controller('uibCarousel',function() {
+	
+});
 ;
 angular.module('app.movie_controller', [])
 
@@ -53033,27 +53081,33 @@ angular.module('app.movie_controller', [])
 
 	$scope.movieError = null;
 	$scope.movie = null;
+	$scope.dataLoading = false;
 
-	OMDBService.getMovieById($stateParams.movieId).then(function(response) {
-		$scope.movie = response.data;
-		OMDBService.getMovieCreditsById($stateParams.movieId).then(function(response) {
-			console.log("The credits response: ", response);
-			$scope.movie.credits = response.data;
+	var getMovieInfo = function() {
+		$scope.dataLoading = true;
+		OMDBService.getMovieById($stateParams.movieId).then(function(response) {
+			$scope.movie = response.data;
+			OMDBService.getMovieCreditsById($stateParams.movieId).then(function(response) {
+				$scope.movie.credits = response.data;
+				$scope.dataLoading = false;
+			}, function(error) {
+				console.error("Error loading movie credits: ", error);
+				$scope.movieError = error;
+			});
+			OMDBService.getMovieImagesById($stateParams.movieId).then(function(response) {
+				$scope.movie.images = response.data;
+			}, function(error) {
+				console.error("Error loading movie images: ", error);
+				$scope.movieError = error;
+			});
 		}, function(error) {
-			console.error("Error loading movie credits: ", error);
+			console.error("Error loading movie information: ", error);
 			$scope.movieError = error;
 		});
-		OMDBService.getMovieImagesById($stateParams.movieId).then(function(response) {
-			console.log("The images response: ", response);
-			$scope.movie.images = response.data;
-		}, function(error) {
-			console.error("Error loading movie images: ", error);
-			$scope.movieError = error;
-		});
-	}, function(error) {
-		console.error("Error loading movie information: ", error);
-		$scope.movieError = error;
-	});
+	}
+
+	// Call the function immediately.
+	getMovieInfo();
 
 }]);
 
@@ -53064,20 +53118,24 @@ angular.module('app.movies_controller', [])
 	$scope.moviesError = null;
 	$scope.movies = null;
 	$scope.noMovies = null;
+	$scope.dataLoading = false;
 	$scope.movie_search = {
 		search: ''
 	};
 	
 	$scope.getMovies = function(title) {
+		$scope.movies = null;
 		$scope.noMovies = null;
+		$scope.dataLoading = true;
 		OMDBService.getMoviesByTitle(title).then(function(response) {
-			console.log('The response from OMDB', response);
 			$scope.movies = response.data.results;
 			if($scope.movies.length == 0) {
 				$scope.noMovies = "No movies for search words";
 			}
+			$scope.dataLoading = false;
 		}, function(error) {
 			console.error(error);
+			$scope.noMovies = error;
 		});
 	}
 
@@ -53089,14 +53147,20 @@ angular.module('app.person_controller', [])
 
 	$scope.personError = null;
 	$scope.person = null;
+	$scope.dataLoading = false;
 
-	OMDBService.getPersonById($stateParams.personId).then(function(response) {
-		console.log("The person response: ", response);
-		$scope.person = response.data;
-	}, function(error) {
-		console.error("Error loading person information: ", error);
-		$scope.personError = error;
-	});
+	var getPersonInfo = function() {
+		$scope.dataLoading = true;
+		OMDBService.getPersonById($stateParams.personId).then(function(response) {
+			$scope.person = response.data;
+			$scope.dataLoading = false;
+		}, function(error) {
+			console.error("Error loading person information: ", error);
+			$scope.personError = error;
+		});
+	}
+	// Call function immediately to get data
+	getPersonInfo();
 
 }]);
 
@@ -53121,7 +53185,6 @@ angular.module('app.profile_controller', [])
 	// Load the users tracked movies
 	$rootScope.$on('reloadTrackedMovies', function() {
 		MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
-			console.log("The user's tracked movies!", response);
 			$scope.trackedMovies = response.data;
 		}, function(error) {
 			console.error(error);
@@ -53154,7 +53217,6 @@ angular.module('app.profile_controller', [])
 	}
 
 	$scope.selectMovie = function(movie) {
-		console.log("Movie selected!");
 		$scope.chosen.movie = movie;
 		$scope.movie_selected = true;
 		$scope.movie_search = '';
@@ -53200,7 +53262,6 @@ angular.module('app.register_controller', [])
 
 	$scope.signup = function() {
 		$scope.registerError = null;
-		console.log("Register function hit!");
 		Auth.register($scope.form).then(function(response) {
 			console.log("The register response: ", response);
 			$rootScope.currentUser = response.data;

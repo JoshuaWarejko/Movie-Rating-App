@@ -11,7 +11,6 @@ angular.module('app.login_controllers', [])
 
 	$scope.login = function() {
 		$scope.loginError = null;
-		console.log("Login function hit!");
 		Auth.login($scope.credentials.email, $scope.credentials.password).then(function(response) {
 			$rootScope.currentUser = response;
 			$state.go('index.profile');

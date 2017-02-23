@@ -8163,6 +8163,10 @@ h4, .h4 {
   color: #a94442;
 }
 
+.alert-text.no-data {
+  margin-top: 20px;
+}
+
 ._720kb-datepicker-calendar-day {
   width: 30px;
   height: 30px;
@@ -8177,6 +8181,28 @@ h4, .h4 {
 
 ._720kb-datepicker-calendar-body {
   margin: 0 3px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.glyphicon {
+  font-family: 'icomoon';
+}
+
+.glyphicon-chevron-left:before {
+  content: "\edc3";
+}
+
+.glyphicon-chevron-right:before {
+  content: "\edbb";
+}
+
+@media only screen and (max-width: 1280px) {
+  .carousel-inner img {
+    max-height: 720px;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */

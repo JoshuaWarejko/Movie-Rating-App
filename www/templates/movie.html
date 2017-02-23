@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-cloak>
 	<div class="content">
 		<h1>{{movie.title}}</h1>
 		<div class="image-wrap">
@@ -9,3 +9,4 @@
 		</div>
 	</div>
 </div>
+<div class="loader text-center" ng-if="dataLoading"><img ng-src="../img/Loading_icon.gif" alt="" /></div>

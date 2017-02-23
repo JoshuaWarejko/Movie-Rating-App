@@ -4,8 +4,9 @@ var rootDir = require('app-root-path').path;
 var request = require('request');
 var apiKey = '9fa4512996f9fd2fa0e544c9efc75fa6';
 
-router.get('/', function(req, res, next) {
-	var url = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=&page=1&include_adult=false";
+// GET / used for getting latest movies (most newly created movies)
+router.get('/latest', function(req, res, next) {
+	var url = "https://api.themoviedb.org/3/movie/latest?api_key=" + apiKey + "&language=en-US";
 	request({
 		method: "GET",
 		uri: url,
@@ -22,7 +23,27 @@ router.get('/', function(req, res, next) {
 		console.log(err);
 		res.json(JSON.parse(err));
 	});
+});
 
+// GET / used for getting popular movies
+router.get('/popular', function(req, res, next) {
+	var url = "https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey + "&language=en-US";
+	request({
+		method: "GET",
+		uri: url,
+		headers: {
+			"Content-Type": "application/json"
+		}
+	}, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			res.json(JSON.parse(body));
+		} else {
+			console.log(response);
+		}
+	}).on('error', function(err) {
+		console.log(err);
+		res.json(JSON.parse(err));
+	});
 });
 
 // GET / Search OMDB for movie by name
@@ -47,7 +68,7 @@ router.get('/:movieName', function(req, res, next) {
 
 });
 
-// GET / Get movie specific data by id
+// GET / Get movie specific data by movie id
 router.get('/by-id/:movieId', function(req, res, next) {
 	var url = "https://api.themoviedb.org/3/movie/" + req.params.movieId + "?api_key=" + apiKey + "&language=en-US";
 	request({
@@ -68,7 +89,7 @@ router.get('/by-id/:movieId', function(req, res, next) {
 	});
 });
 
-// GET / Get movie cast and crew by id
+// GET / Get movie cast and crew by movie id
 router.get('/:movieId/credits', function(req, res, next) {
 	var url = "https://api.themoviedb.org/3/movie/" + req.params.movieId + "/credits?api_key=" + apiKey + "&language=en-US";
 	request({

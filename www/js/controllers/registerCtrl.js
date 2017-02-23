@@ -14,7 +14,6 @@ angular.module('app.register_controller', [])
 
 	$scope.signup = function() {
 		$scope.registerError = null;
-		console.log("Register function hit!");
 		Auth.register($scope.form).then(function(response) {
 			console.log("The register response: ", response);
 			$rootScope.currentUser = response.data;

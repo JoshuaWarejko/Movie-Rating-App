@@ -65,6 +65,15 @@ angular.module('app.services', [])
 			});
 		});
 	}
+	this.getPopularMovies = function() {
+		return $q(function(resolve, reject) {
+			$http.get(CONFIG.url + '/movie-search/popular').then(function(response) {
+				return resolve(response);
+			}, function(error) {
+				return reject(error);
+			});
+		});
+	}
 })
 
 // Used for handling movies within the local database

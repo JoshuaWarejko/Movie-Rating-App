@@ -48,6 +48,14 @@ angular.module('app.routes', ['ui.router'])
 		authenticate: false
 	})
 
+	// User Feed
+	.state('index.feed', {
+		url: '/feed',
+		templateUrl: '/templates/feed.html',
+		controller: 'FeedController',
+		authenticate: false
+	})
+
 	// Movies
 	.state('index.movies', {
 		url: '/movies',

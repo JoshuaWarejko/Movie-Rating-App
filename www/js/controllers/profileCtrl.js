@@ -19,7 +19,6 @@ angular.module('app.profile_controller', [])
 	// Load the users tracked movies
 	$rootScope.$on('reloadTrackedMovies', function() {
 		MovieTrackService.getTrackedMovies($rootScope.currentUser.id).then(function(response) {
-			console.log("The user's tracked movies!", response);
 			$scope.trackedMovies = response.data;
 		}, function(error) {
 			console.error(error);
@@ -52,7 +51,6 @@ angular.module('app.profile_controller', [])
 	}
 
 	$scope.selectMovie = function(movie) {
-		console.log("Movie selected!");
 		$scope.chosen.movie = movie;
 		$scope.movie_selected = true;
 		$scope.movie_search = '';

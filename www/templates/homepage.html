@@ -1,12 +1,10 @@
-<div ui-view>
-	<div class="container">
-		<div class="content">
-			<h1>User Feed</h1>
-			<div class="posts">
-				<div class="post" ng-repeat="post in trackedMovies | orderBy:'updatedDate':true">
-					<div class="title">
-						<h3>{{post.movie.title}}&nbsp;{{post.updatedDate | dateSeparator: '/' }} at {{post.time}}</h3>
-					</div>
+<div ui-view id="homepage">
+	<div class="carousel-wrapper">
+		<div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+			<div uib-slide ng-repeat="slide in popularSlides track by slide.id" index="slide.id">
+				<img ng-src="{{slide.image}}" style="margin:auto;">
+				<div class="carousel-caption">
+					<h2>{{slide.title}}</h2>
 				</div>
 			</div>
 		</div>

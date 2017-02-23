@@ -9,7 +9,8 @@ angular.module('app.controllers', [
 	'app.register_controller',
 	'app.movies_controller',
 	'app.movie_controller',
-	'app.person_controller'
+	'app.person_controller',
+	'app.feed_controller'
 	]);
 
 
@@ -35,4 +36,7 @@ angular.module('app.main_controllers', [])
 .controller('NavigationController', function($rootScope, $scope, $state) {
 	$scope.nav = "Navigation Text";
 })
+.controller('uibCarousel',function() {
+	
+});
 ;

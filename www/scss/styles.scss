@@ -95,15 +95,15 @@ $header-height: 50px;
 }
 
 @media only screen and (min-width: 768px) {
-  .display-table {
-    font-size: 0;
-    > div {
-      float: none;
-      font-size: initial;
-      display: inline-block;
-      vertical-align: middle;
-    }
-  }
+	.display-table {
+		font-size: 0;
+		> div {
+			float: none;
+			font-size: initial;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
 }
 
 html, html body {
@@ -184,20 +184,47 @@ h4, .h4 {
 }
 .alert-text {
 	color: $red;
+	&.no-data {
+		margin-top: 20px;
+	}
 }
 
 ._720kb-datepicker-calendar-day {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    padding: 0;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0;
 }
 
 ._720kb-datepicker-calendar-days-header div {
-    font-size: 10px;
-    padding: 0 !important;
+	font-size: 10px;
+	padding: 0 !important;
 }
 
 ._720kb-datepicker-calendar-body {
-    margin: 0 3px;
+	margin: 0 3px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+
+// Override carousel glyphcon styles
+
+.glyphicon {
+	font-family: 'icomoon';
+}
+
+.glyphicon-chevron-left:before {
+	content: "\edc3";
+}
+
+.glyphicon-chevron-right:before {
+	content: "\edbb";
+}
+
+@media only screen and (max-width: 1280px) {
+	.carousel-inner img {
+		max-height: 720px;
+	}
 }
