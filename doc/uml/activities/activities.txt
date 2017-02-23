@@ -1,0 +1,135 @@
+@startuml
+
+title Log in
+
+(*) --> "Fill username and password form"
+    --> "Submit form"
+    --> if "Username and password correct"
+    	--> [Success] "Redirect to home page"
+	--> (*)
+    else
+	--> [Failure] "Display error message"
+	--> (*)
+    endif
+
+@enduml
+
+
+@startuml
+
+title Log out
+
+(*) --> "Triggers log out"
+    --> if "User is logged"
+    	--> [Success] "Redirect to login page"
+	--> (*)
+    else
+	--> [Failure] "Display error message"
+	--> (*)
+    endif
+
+@enduml
+
+
+@startuml
+
+title Register
+
+(*) --> "Fill registration form"
+    --> "Submit form"
+    --> if "Form is valid"
+    	--> [Success] "Create new user"
+	--> "Redirect to home page"
+	--> (*)
+    else
+	--> [Failure] "Display error message"
+	--> (*)
+    endif
+
+@enduml
+
+@startuml
+
+title Reset password
+
+(*) --> "Give username and/or email"
+    --> "Submit form"
+    --> if "Email is associated to existing user"
+    	--> [Success] "Send reset password email with link"
+	--> (*)
+    else
+	--> [Failure] "Display error message"
+	--> (*)
+    endif
+
+@enduml
+
+
+@startuml
+
+title View profile
+
+(*) --> "Access profile"
+    --> "Fetch all user data"
+    --> "Display user data with edition actions"
+    --> (*)
+
+@enduml
+
+
+@startuml
+
+title View other user's profile
+
+(*) --> "Access profile"
+    --> "Fetch all user data"
+    --> "Display user data"
+    --> (*)
+
+@enduml
+
+
+@startuml
+
+title Fetch movie data from OMDB
+
+(*) --> "Initiate connection to OMBD API"
+    --> "Send request for movie searching"
+    --> "Parse JSON result"
+    --> (*)
+
+@enduml
+
+
+@startuml
+
+title Delete review
+
+(*) --> "User clicks on delete review"
+    --> if "Review is owned by user"
+    	--> [Success] "Delete review from DB"
+	--> "Display success message"
+	--> (*)    
+    else
+	--> [Failure] "Display error message"
+	--> (*)
+    endif
+
+@enduml
+
+
+@startuml
+
+title Search a movie
+
+(*) --> "User types in movie research bar"
+    --> [At every new letter typed] "Get what the user has typed so far"
+    --> "Fetch list of movies from OMDB"
+    --> if "Movies were found"
+    	--> [Success] "Display list of clickable movies names"
+	--> (*)
+    else
+	--> [Failure] "Displayer 'No movies found with this name' message"
+	--> (*)
+    endif
+@enduml

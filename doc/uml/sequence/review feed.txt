@@ -1,0 +1,9 @@
+@startuml
+title review feed
+(*) --> "click review feed "
+--> "get most recent reviews from server"
+-->"display reviews to the user"
+-->(*)
+	
+
+@enduml
