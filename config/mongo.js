@@ -22,8 +22,8 @@ function Mongo() {
       port: '27017',
       db: 'movierating',
       credentials: {
-        user: "",
-        pass: "",
+        user: "joshuawarejko",
+        pass: "Thebled13",
         auth: {
           authdb: 'admin'
         }
