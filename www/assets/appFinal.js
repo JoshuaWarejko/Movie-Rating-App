@@ -40,12 +40,12 @@ var app = angular.module('MovieRating', [
   }
 
 }]);
-var env = window.env || "development";
+var env = window.env || "production";
 var baseUrl;
 var shopUrl;
 
 if (env === "production") {
-  baseUrl = '';
+  baseUrl = '/api';
 } else { // Development
   baseUrl = '//localhost:3000/api';
 }
