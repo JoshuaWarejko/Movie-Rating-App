@@ -33,6 +33,7 @@ var app = angular.module('MovieRating', [
 
   $rootScope.$on('$stateChangeSuccess', function() {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
+		$rootScope.currentState = $state.current;
 	});
 
   if (!$rootScope.currentUser && $cookies.get('connect.sid')) {

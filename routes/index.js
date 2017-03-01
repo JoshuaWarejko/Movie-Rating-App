@@ -16,6 +16,13 @@ router.get('/login', function(req, res, next) {
   });
 });
 
+router.get('/feed', function(req, res, next) {
+  res.render('index', {
+    title: 'Feed | Movie Rating App',
+    env: req.app.get('env')
+  });
+});
+
 router.get('/profile', function(req, res, next) {
   res.render('index', {
     title: 'Profile | Movie Rating App',

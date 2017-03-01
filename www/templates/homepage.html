@@ -1,6 +1,7 @@
 <div ui-view id="homepage">
 	<div class="carousel-wrapper">
 		<div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+<!-- 			<h2 class="carousel-title">Popular Films</h2> -->
 			<div uib-slide ng-repeat="slide in popularSlides track by slide.id" index="slide.id">
 				<img ng-src="{{slide.image}}" style="margin:auto;">
 				<div class="carousel-caption">

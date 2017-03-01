@@ -132,6 +132,15 @@ h4, .h4 {
 .text-center {
 	text-align: center;
 }
+.main-content {
+	padding-top: 70px;
+	&.userActive {
+		padding-top: 104px;
+	}
+	&.home {
+		padding-top: 0;
+	}
+}
 .container {
 	@media only screen and (min-width: 1200px) {
 		width: 1200px;
@@ -224,7 +233,19 @@ h4, .h4 {
 }
 
 @media only screen and (max-width: 1280px) {
-	.carousel-inner img {
-		max-height: 720px;
+	.carousel-inner .item .text-center {
+		max-height: 680px;
+		overflow: hidden;
+		img {
+			width: 100%;
+		}
 	}
+}
+
+.carousel-title {
+	position: absolute;
+	top: 30%;
+	width: 100%;
+	text-align: center;
+	color: #fff;
 }

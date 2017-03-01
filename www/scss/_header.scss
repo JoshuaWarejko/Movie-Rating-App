@@ -1,7 +1,11 @@
 header {
-	border-bottom: 1px solid $brand-primary;
+	position: absolute;
+	z-index: 9;
+	width: 100%;
+	background: rgba(#fff,.4);
+	border: 0 none;
 	.header_inner {
-		padding-top: 10px;
+		padding: 10px 0;
 		.user {
 			margin-bottom: 20px;
 			a {

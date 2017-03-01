@@ -7741,11 +7741,15 @@ button.close {
 }
 
 header {
-  border-bottom: 1px solid #81bc41;
+  position: absolute;
+  z-index: 9;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  border: 0 none;
 }
 
 header .header_inner {
-  padding-top: 10px;
+  padding: 10px 0;
 }
 
 header .header_inner .user {
@@ -8094,6 +8098,18 @@ h4, .h4 {
   text-align: center;
 }
 
+.main-content {
+  padding-top: 70px;
+}
+
+.main-content.userActive {
+  padding-top: 104px;
+}
+
+.main-content.home {
+  padding-top: 0;
+}
+
 @media only screen and (min-width: 1200px) {
   .container {
     width: 1200px;
@@ -8200,9 +8216,21 @@ h4, .h4 {
 }
 
 @media only screen and (max-width: 1280px) {
-  .carousel-inner img {
-    max-height: 720px;
+  .carousel-inner .item .text-center {
+    max-height: 680px;
+    overflow: hidden;
   }
+  .carousel-inner .item .text-center img {
+    width: 100%;
+  }
+}
+
+.carousel-title {
+  position: absolute;
+  top: 30%;
+  width: 100%;
+  text-align: center;
+  color: #fff;
 }
 
 /*# sourceMappingURL=styles.css.map */
