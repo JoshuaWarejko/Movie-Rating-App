@@ -47,8 +47,8 @@ gulp.task('main-bower-files', function() {
   }
 
   console.log('\nCombining Files');
-  gulp.src(scripts).pipe(concat('vendor.js'))/* .pipe(minifyJs({noSource:true,ext:{src:'-debug.js',min:'.js'}})) */.pipe(gulp.dest('./www/js/'));
-  gulp.src(styles).pipe(concat('vendor.css')).pipe(minifyCss({keepSpecialComments: 0})).pipe(gulp.dest('./www/css/'));
+  gulp.src(scripts).pipe(concat('vendor.js'))/* .pipe(minifyJs({noSource:true,ext:{src:'-debug.js',min:'.js'}})) */.pipe(gulp.dest('./www/assets/'));
+  gulp.src(styles).pipe(concat('vendor.css')).pipe(minifyCss({keepSpecialComments: 0})).pipe(gulp.dest('./www/assets/'));
   console.log('\nSaved Files\n');
 });
 

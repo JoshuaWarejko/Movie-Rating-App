@@ -1,10 +1,12 @@
-var env = window.env || "production";
+var env = window.env || "development";
 var baseUrl;
 var shopUrl;
 
-if (env === "production") {
+if (env !== "development") {
+	// Production
   baseUrl = '/api';
-} else { // Development
+} else {
+	// Development
   baseUrl = '//localhost:3000/api';
 }
 
