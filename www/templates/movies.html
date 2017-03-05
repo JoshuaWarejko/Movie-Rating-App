@@ -15,9 +15,19 @@
 			<div class="loader text-center" ng-if="dataLoading"><img ng-src="../img/Loading_icon.gif" alt="" /></div>
 			<div class="movies-wrapper row" ng-cloak>
 				<div class="movie col-sm-6 col-md-3 text-center" ng-repeat="movie in movies">
-					<a ui-sref="index.movies.movie({movieId: movie.id})">
+					<a ui-sref="index.movies.movie({movieId: movie.id})" class="movie_link">
 						<div class="image-wrap clearfix" ng-if="movie.poster_path">
 							<div class="image" style="background-image:url('https://image.tmdb.org/t/p/w500{{movie.poster_path}}');"></div>
+							<div class="image_overlay">
+								<div class="image_overlay_inner">
+									<div class="btn-wrapper">
+									<div ng-click="trackMovie()" class="btn btn-primary">Rate Movie</div>
+									</div>
+									<div class="btn-wrapper">
+										<div class="btn btn-default">View Movie</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="image-wrap clearfix" ng-if="!movie.poster_path">
 							<div class="image" style="background-image:url('../img/no_image_available.png');"></div>
